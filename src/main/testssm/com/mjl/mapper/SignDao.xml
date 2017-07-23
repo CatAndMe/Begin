@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace用于与DAO层的接口类进行绑定,这样我们无需实现DAO层的接口
+类,其接口类就能够自动的找到相关的SQL语句进行绑定实现-->
+<mapper namespace="com.mjl.dao.SignDao">
+    <!--select表示查询,它的id名称必须与DAO层接口的方法名相同,否则无法绑定-->
+    <select id="selectByEmplName" parameterType="string" resultType="Sign">
+        select * from sign where EmplName = #{EmplName}
+    </select>
+
+    <select id="selectByEmplId" parameterType="int" resultType="Sign">
+        select * from sign where EmplId = #{EmplId}
+    </select>
+
+    <select id="getAllSign" resultType="Sign">
+        SELECT * FROM sign
+    </select>
+
+    <insert id="addSign" parameterType="Sign">
+        insert into sign(formId,emplName,emplId,time,login,loginState,reason,trueTime) values (#{formId},#{emplName},#{emplId},#{time},#{login},#{loginState},#{reason},#{trueTime})
+    </insert>
+
+    <select id="getSignLogsByPage" resultType="Sign" parameterType="map">
+        select * from sign limit #{start},#{end}
+    </select>
+
+    <select id="getAllSignCount" parameterType="int" resultType="int">
+        select count(*) from sign
+    </select>
+
+
+</mapper>

@@ -7,27 +7,27 @@
 <mapper namespace="com.mjl.dao.IUserDao">
     <!--select表示查询,它的id名称必须与DAO层接口的方法名相同,否则无法绑定-->
     <select id="selectByName" parameterType="string" resultType="User">
-        select * from tb_user where username = #{username}
+        select * from employee where EmplName = #{EmplName}
     </select>
 
     <select id="selectById" parameterType="Integer" resultType="User">
-        select * from tb_user where id = #{id}
+        select * from employee where EmplId = #{EmplId}
     </select>
 
     <update id="updateUserById" parameterType="User">
-        update tb_user set username=#{username},password=#{password} where id=#{id}
+        update employee set EmplName=#{EmplName},EmplPassword=#{EmplPassword} where EmplId=#{EmplId}
     </update>
 
     <select id="getAllUser" resultType="User">
-        SELECT * FROM tb_user
+        SELECT * FROM employee
     </select>
 
     <delete id="deleteById" parameterType="Integer">
-        delete from tb_user where id = #{id}
+        delete from employee where EmplId = #{EmplId}
     </delete>
 
     <insert id="addUser" parameterType="User">
-        insert into tb_user(id,username,password) values (#{id},#{username},#{password})
+        insert into employee(EmplId,EmplName,EmplPassword) values (#{EmplId},#{EmplName},#{EmplPassword})
     </insert>
 
 

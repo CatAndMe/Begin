@@ -13,25 +13,18 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class HanderInerceptorl implements HandlerInterceptor {
-
-    private List<String> excludedUrls;
-    public void setExcludeUrls(List<String> excludeUrls) {
-        this.excludedUrls = excludeUrls;
-    }
+    @Autowired
+    UserService userService;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse arg1, Object arg2) throws Exception {
+        //获取请求的url
+        User user=(User)request.getSession().getAttribute("user");
 
-        if (request.getSession().getAttribute("user")!=null){
-            //登陆成功的用户
+        if(user!=null   ){
             return true;
-
-        }else {
-            //没有登陆，转向登陆界面
-            request.getRequestDispatcher("/login.jsp").forward(request,arg1);
+        }else{
             return false;
         }
-
-
     }
 
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {

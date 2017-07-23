@@ -15,8 +15,7 @@ import java.util.List;
  */
 //@Service("UserService") 注解用于标示此类为业务层组件,在使用时会被注解的类会自动由
     //spring进行注入,无需我们创建实例
-@Service("UserService")
-
+@Service("userService")
 public class UserServiceImpl implements UserService{
 
     //自动注入iuserdao 用于访问数据库
@@ -42,7 +41,6 @@ public class UserServiceImpl implements UserService{
     public List<User> getAllUser() {
         return Mapper.getAllUser();
     }
-
 
     public User selectById(Integer id) {
         return Mapper.selectById(id);

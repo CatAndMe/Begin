@@ -13,10 +13,10 @@ import java.util.List;
 public interface IUserDao {
     //这里以接口形式定义了数据库操作方法,我们只需
     // 在Mybatis映射文件中对其进行映射就可以直接使用
-    public User selectById(Integer id);
-    public User selectByName(String username);
+    public User selectById(Integer EmplId);
+    public User selectByName(String EmplName);
     List<User> getAllUser();
     public boolean addUser(User user);
-    public boolean deleteById(Integer id);
+    public boolean deleteById(Integer EmplId);
     public boolean updateUserById(User user);
 }

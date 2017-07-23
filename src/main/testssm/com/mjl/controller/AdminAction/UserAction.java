@@ -1,5 +1,7 @@
-package com.mjl.controller;
+package com.mjl.controller.AdminAction;
+import com.mjl.model.Sign;
 import com.mjl.model.User;
+import com.mjl.service.SignService;
 import com.mjl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,12 +25,18 @@ public class UserAction {
     //自动注入业务层的userService类
     @Autowired
     UserService userService;
+    @Autowired
+    SignService signService;
+
 
     @RequestMapping("/userList")
     public String list(HttpServletRequest request){
-        List<User> userList = userService.getAllUser();
-        request.setAttribute("userList",userList);
-        return "view/list";
+//        List<User> userList = userService.getAllUser();
+//        request.setAttribute("userList",userList);
+//        return "view/list";
+        List<Sign> signList = signService.getAllSign();
+        request.setAttribute("signList",signList);
+        return "SignView/SignList";
     }
 
     @RequestMapping("/add")
@@ -110,7 +118,7 @@ public class UserAction {
 
     @RequestMapping("/SuccessView")
     public String SuccessView(){
-        return "view/success";
+        return "view/adminView";
     }
 
 

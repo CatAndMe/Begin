@@ -1,4 +1,4 @@
-package com.mjl.controller;
+package com.mjl.controller.AdminAction;
 
 import com.mjl.model.User;
 import com.mjl.service.UserService;
@@ -7,18 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-
-
-/**
- * Created by alvin on 15/9/7.
- */
 
 //@Controller注解用于标示本类为web层控制组件
 @Controller
@@ -31,7 +22,7 @@ public class UserController {
     @Autowired
         UserService userService;
 
-    //login业务的访问位置为/user/login
+        //login业务的访问位置为/user/login
     @RequestMapping("/login")
 //    @ResponseBody
        public String login(User user,HttpServletRequest request,Model model){
@@ -47,7 +38,7 @@ public class UserController {
             request.setAttribute("user",user);
             it.setAttribute("user",user);
             //并跳转到success.jsp页面
-            return "view/success";
+            return "view/adminView";
         }else{
             //若不对,则将错误信息显示到错误页面
             request.setAttribute("message","用户名密码错误");

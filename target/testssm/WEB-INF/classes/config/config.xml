@@ -5,6 +5,7 @@
     <!--为com.mjl.model.User设置别名 User 方便调用-->
     <typeAliases>
         <typeAlias alias="User" type="com.mjl.model.User"/>
+        <typeAlias type="com.mjl.model.Sign" alias="Sign"/>
     </typeAliases>
 
 

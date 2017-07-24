@@ -40,17 +40,13 @@ public class ViewAction {
     //........
     //签到日志上传接口
     @RequestMapping("/uploadLogs")
-    public void uploadLogs(HttpServletResponse response, HttpServletRequest request, @RequestParam(required = true) int formId){
-
-        JSONArray jsStr = JSONArray.fromObject(formId);
-        Sign[] sign = (Sign[]) JSONArray.toArray(jsStr, Sign.class);
-
+    @ResponseBody
+    public void uploadLogs(HttpServletResponse response, HttpServletRequest request, @RequestParam(required = true) String jsonInfo){
+        JSONArray jsStr = JSONArray.fromObject(jsonInfo);
+        Sign[] sign = (Sign[]) JSONArray.toArray(jsStr,Sign.class);
         for (int i=0;i<sign.length;i++){
             signService.addSign(sign[i]);
         }
-
-
-
     }
 
     @RequestMapping("/logListByPage")
@@ -64,7 +60,7 @@ public class ViewAction {
             pageSize=20;
         }
         int total=signService.getAllSignCount();
-        int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);
+        int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);//向上取整，格式化total
 
         Map<String,Object> pageObject=new HashMap<String, Object>();
         pageObject.put("pageNum",pageNum);

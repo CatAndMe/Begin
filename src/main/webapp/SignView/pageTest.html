@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PageTest</title>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#bi").click(function(){
+                var params={};
+                var data_=[{"formId":"123","emplName":"1","emplId":"1","time":"1","login":"1","loginState":"1","reason":"1","trueTime":"1"}];
+                params.jsonInfo=JSON.stringify(data_);
+                $.post("/employee/uploadLogs.do",params,
+                    function(data){
+                        alert(data);//                [{"name":"a"},{"name","b"},{"name","c"}]，则无法传递，此时必须使用JSON.stringify将数组对象转换成字符串，再进行AJAX传递即可。
+//比如我有两个变量，我要将a转换成字符串，将b转换成JSON对象：
+//var a={"name":"tom","sex":"男","age":"24"};
+//                var b='{"name":"Mike","sex":"女","age":"29"}';
+//                在Firefox，chrome，opera，safari，ie9，ie8等高级浏览器直接可以用JSON对象的stringify()和parse()方法。
+//JSON.stringify(obj)将JSON转为字符串。JSON.parse(string)将字符串转为JSON格式；
+//
+//上面的转换可以这么写：
+//var a={"name":"tom","sex":"男","age":"24"};
+//                var b='{"name":"Mike","sex":"女","age":"29"}';
+//                var aToStr=JSON.stringify(a);
+//                var bToObj=JSON.parse(b);
+//                alert(typeof(aToStr));  //string
+//                alert(typeof(bToObj));//object
+//
+//                JSON.stringify()
+                    })
+            })
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

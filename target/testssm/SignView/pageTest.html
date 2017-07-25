@@ -1,68 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html >
 <head>
-    <meta charset="UTF-8">
-    <title>PageTest</title>
+    <base href="<%=basePath %>" />
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
-        $("input[name='page_num']").keydown(function(e){
-            if(e.keyCode == 13){
-                $("input[name='go_btn']").click();
-            }
-        });
+        $(document).ready(
+            function(){
+                var params={pageNum:1,pageSize:4};
+                $.post("/employee/logListByPage.do",params,
+                    function(data){
+                        var results = JSON.parse(data);
+                        var list = results.Data;
+                        var totalCount = results.totalItemCount;
+                        var pages = results.totalPages;
+                        var pageNo=results.pageNum;
+                        var s = '';
+                        if(list.length != 0){
+                            for(var i=0; i<list.length; i++){
+                                s += '<tr><td>' +list[i].formId
+                                    + '</td><td>' + list[i].emplName
+                                    + '</td><td>' + list[i].emplId
+                                    + '</td><td>' + list[i].time
+                                    + '</td><td>' + list[i].login
+                                    + '</td><td>' + list[i].loginState
+                                    + '</td><td>' + list[i].reason
+                                    + '</td><td>' + list[i].trueTime
+                                    + '</td></tr>';
 
-        $("input[name='go_btn']").click(function(){
-            var goPage = $("input[name='page_num']").val();
-            if(goPage >= 1 && goPage <=pages && goPage != pageNo){
-                pageNo = goPage;
-                loadData(pageNo, pageSize);
-            } else{
-                return false;
-            }
-        });
+                            }
+                            $('#tb').append(s);
+                        } else{
 
-        $("#01").click(function(){
-            pageNo = 1;
-            loadData(pageNo, pageSize);
-        });
+                        }
+                    })
 
-        $("#04").click(function(){
-            pageNo = pages;
-            loadData(pageNo, pageSize);
-        });
-
-        $("#02").click(function(){
-            if(pageNo == 1){
-                return false;
-            } else{
-                pageNo--;
-                loadData(pageNo, pageSize);
-            }
-        });
-
-        $("#03").click(function(){
-            if(pageNo == pages){
-                return false;
-            } else{
-                pageNo++;
-                loadData(pageNo, pageSize);
-            }
-        });
+            })
     </script>
 </head>
 <body>
-<form id="form1" runat="server">
-    <div id="divLayer">
 
-        <div class="navigation">
-            <div style="text-align: left; float: left; width: 260px;">
-                共<label id="lblToatl"></label>条数据 第[<label id="lblCurent"></label>]页/共[<label id="lblPageCount">0</label>]页
-            </div>
-            <div style="text-align: right; float: right;">
-                <a id="first" href="#">首页</a> <a id="previous" href="#">上一页</a> <a id="next" href="#">
-                下一页</a> <a id="last" href="#">末页</a>
-            </div>
-        </div>
-    </div>
-</form>
+<div >
+
+    <table id="tb"></table>
+
+</div>
+
 </body>
 </html>

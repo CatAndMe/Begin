@@ -51,7 +51,7 @@ public class ViewAction {
 
     @RequestMapping("/logListByPage")
     @ResponseBody
-    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize){
+    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String date){
         //处理分页参数
         if(pageNum==null||pageNum==0){
             pageNum=1;
@@ -63,10 +63,10 @@ public class ViewAction {
         int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);//向上取整，格式化total
 
         Map<String,Object> pageObject=new HashMap<String, Object>();
-        pageObject.put("pageNum",pageNum);
-        pageObject.put("pageSize",pageSize);
-        pageObject.put("totalItemCount",total);
-        pageObject.put("totalPageCount",totalPages);
+        pageObject.put("pageNum",pageNum); //页码
+        pageObject.put("pageSize",pageSize);//页数
+        pageObject.put("totalItemCount",total);  //总条目数
+        pageObject.put("totalPageCount",totalPages);//总页面
         pageObject.put("hasNextPage",pageNum<totalPages);
         pageObject.put("hasPrefPage",pageNum>1);
         if(pageNum>totalPages){
@@ -74,10 +74,10 @@ public class ViewAction {
 
         }
         List<Sign> signList = signService.getSignLogsByPage(pageNum,pageSize);
-        pageObject.put("data",signList);
+        pageObject.put("Data",signList);
         pageObject.put("itemCount",signList==null?0:signList.size());
         request.setAttribute("signList",signList);
-        return JSONObject.fromObject(pageObject).toString();
+        return JSONObject.fromObject(pageObject);
     }
 
 

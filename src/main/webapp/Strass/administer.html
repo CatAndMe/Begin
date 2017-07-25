@@ -1,0 +1,186 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script type="text/javascript" src="jss/jquery.js"></script>
+    <script type="text/javascript">
+
+        var pageSize = "8";//每页行数
+        var currentPage = "1";//当前页
+        var totalPage = "4";//总页数
+        var rowCount = "4";//总条数
+        var params="";//参数
+        var date_="";
+        function queryForPages(){
+            if (date_.replace(/(^s*)|(s*$)/g, "").length ==0 && date_==""){
+                var params={pageNum:currentPage,pageSize:pageSize};
+            }else {
+                var params={pageNum:currentPage,pageSize:pageSize,date:loginDate};
+            }
+
+            $.post("/employee/logListByPage.do",params,
+                function(data){
+//                    var results = JSON.parse(data);
+                    var results = data;
+                    var list = results.Data;
+                    totalPage = results.totalPageCount;
+                    rowCount = results.totalItemCount;
+                    pageNo=results.pageNum;
+                    var s = '';
+
+                    if(list.length != 0){
+                        for(var i=0; i<list.length; i++){
+
+                                s += '<tr><td>' +i
+                                    + '</td><td>' + list[i].emplName
+                                    + '</td><td>' + list[i].emplId
+                                    + '</td><td>' + list[i].time
+                                    + '</td><td>' + list[i].login
+                                    + '</td><td>' + list[i].loginState
+                                    + '</td><td>' + list[i].reason
+                                    + '</td><td>' + list[i].trueTime
+                                    + '</td></tr>';
+
+                        }
+                        $('#tb').html(s);
+                    } else{
+
+                    }
+                })
+
+        }
+        $(document).ready(
+            function(){
+                //时间查询
+                $("#keyWord").click(function(){
+                    date_="form";
+                    queryForPages();
+                });
+
+                //首页
+                $("#firstPage").click(function(){
+                    currentPage="1";
+                    queryForPages();
+                });
+                //上一页
+                $("#previous").click(function(){
+                    if(currentPage>1)
+                    {
+                        currentPage-- ;
+                    }
+                    queryForPages();
+                });
+                //下一页
+                $("#next").click(function(){
+                    if(currentPage<totalPage)
+                    {
+                        currentPage++ ;
+                    }
+                    queryForPages();
+                });
+                //尾页
+                $("#last").click(function(){
+                    currentPage = totalPage;
+                    queryForPages();
+                });
+                queryForPages();
+            }
+            );
+
+    </script>
+
+</head>
+<body>
+<div class="topbar-wrap white">
+    <div class="topbar-inner clearfix">
+        <div class="topbar-logo-wrap clearfix">
+            <h1 class="topbar-logo none"><a href="index.html" class="navbar-brand">后台管理</a></h1>
+        </div>
+    </div>
+</div>
+<div class="container clearfix">
+    <div class="sidebar-wrap">
+        <div class="sidebar-title">
+            <h1>菜单</h1>
+        </div>
+        <div class="sidebar-content">
+            <ul class="sidebar-list">
+                <li>
+                    <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
+                    <ul class="sub-menu">
+                        <li><a href="administer-分类管理（标签）.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
+                        <li><a href="administer-公告发布.html"><i class="icon-font">&#xe005;</i>公告发布</a></li>
+                        <li><a href="administer-订单查询.html"><i class="icon-font">&#xe006;</i>订单查询</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="icon-font">&#xe018;</i>系统管理</a>
+                    <ul class="sub-menu">
+                        <li><a href="system.html"><i class="icon-font">&#xe017;</i>系统设置</a></li>
+                        <li><a href="system.html"><i class="icon-font">&#xe037;</i>清理缓存</a></li>
+                        <li><a href="system.html"><i class="icon-font">&#xe046;</i>数据备份</a></li>
+                        <li><a href="system.html"><i class="icon-font">&#xe045;</i>数据还原</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/sidebar-->
+    <div class="main-wrap">
+
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="index.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">分类管理</span></div>
+        </div>
+        <div class="search-wrap">
+            <div class="search-content">
+                <form>
+                    <table class="search-tab">
+                        <tr>
+                            <th width="70">时间:</th>
+                            <td><input  class="keyWord-text"  name="year" value="" id="year" type="text"></td>
+                            <td><input  class="keyWord-text"  name="mouth" value="" id="mouth" type="text"></td>
+                            <td><input  class="keyWord-text"  name="day" value="" id="day" type="text"></td>
+                            <td><input class="btn btn-primary btn2" name="sub" value="查询" type="submit"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="result-wrap">
+
+                <div class="result-content">
+                    <table  class="result-tab" width="100%">
+                        <tr>
+                            <th class="tc" width="5%"></th>
+                            <th>员工名</th>
+                            <th>员工号</th>
+                            <th>签到时间</th>
+                            <th>操作</th>
+                            <th>状态</th>
+                            <th>理由</th>
+                            <th>实际时间</th>
+
+                        </tr>
+
+                        <tbody class="result-tab" width="100%" id="tb" style="align-content: center"></tbody>
+
+
+                    </table>
+
+                    <div class="list-page">
+                        <button id="firstPage">首页</button>
+                        <button id="previous">上一页</button>
+                        <button id="next">下一页</button>
+                        <button id="last">尾页</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <!--/main-->
+</div>
+</body>
+</html>

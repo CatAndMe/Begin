@@ -1,37 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html >
 <head>
-    <meta charset="UTF-8">
-    <title>PageTest</title>
+    <base href="<%=basePath %>" />
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
     <script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
-<script>
+    <script type="text/javascript">
+        $(document).ready(
+            function(){
+                var params={pageNum:1,pageSize:4};
+                $.post("/employee/logListByPage.do",params,
+                    function(data){
+                        var results = JSON.parse(data);
+                        var list = results.Data;
+                        var totalCount = results.totalItemCount;
+                        var pages = results.totalPages;
+                        var pageNo=results.pageNum;
+                        var s = '';
+                        if(list.length != 0){
+                            for(var i=0; i<list.length; i++){
+                                s += '<tr><td>' +list[i].formId
+                                    + '</td><td>' + list[i].emplName
+                                    + '</td><td>' + list[i].emplId
+                                    + '</td><td>' + list[i].time
+                                    + '</td><td>' + list[i].login
+                                    + '</td><td>' + list[i].loginState
+                                    + '</td><td>' + list[i].reason
+                                    + '</td><td>' + list[i].trueTime
+                                    + '</td></tr>';
 
-    //$.get()方法
-    function ajaxGet(){
-        $.get(
-            "servlet/AjaxGetServlet",      //url地址
-            {
-                userName:$("#userName").val(),
-                age:$("#age").val()
-            },
-            function(data){ //回传函数
-                alert(data);
-            },
-            "text")
-    }
-</script>
+                            }
+                            $('#tb').append(s);
+                        } else{
+
+                        }
+                    })
+
+            })
+    </script>
 </head>
 <body>
-<br>
-<div class="text_align-center">JQuery AJAX $.get()方法提交演示</div>
-<hr />
-<div class="align-center">
-    <form action="" method="post">
-        姓名:<input type="text" name="userName" id="userName"/><br/>
-        年龄:<input type="text" name="age" id="age"/><br/><br/>
-        <input type="button" onclick="ajaxGet()" value="$.get()方法提交"/><br/>
-    </form>
+
+<div >
+
+    <table id="tb"></table>
+
 </div>
-<hr />
+
 </body>
 </html>

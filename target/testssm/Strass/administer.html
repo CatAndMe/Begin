@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <script type="text/javascript" src="jss/jquery.js"></script>
+    <script type="text/javascript" src="jss/libs/modernizr.min.js"></script>
     <script type="text/javascript">
 
         var pageSize = "8";//每页行数
@@ -16,12 +17,9 @@
         var params="";//参数
         var date_="";
         function queryForPages(){
-            if (date_.replace(/(^s*)|(s*$)/g, "").length ==0 && date_==""){
-                var params={pageNum:currentPage,pageSize:pageSize};
-            }else {
-                var params={pageNum:currentPage,pageSize:pageSize,date:loginDate};
-            }
 
+
+            var params={pageNum:currentPage,pageSize:pageSize,date:date_};
             $.post("/employee/logListByPage.do",params,
                 function(data){
 //                    var results = JSON.parse(data);
@@ -46,9 +44,11 @@
                                     + '</td></tr>';
 
                         }
+
                         $('#tb').html(s);
                     } else{
 
+                        $('#tb').html("");
                     }
                 })
 
@@ -56,9 +56,9 @@
         $(document).ready(
             function(){
                 //时间查询
-                $("#keyWord").click(function(){
-                    date_="form";
-                    queryForPages();
+                $("#botton").click(function(){
+                    date_=$(day).val();
+                  queryForPages();
                 });
 
                 //首页
@@ -112,9 +112,9 @@
                 <li>
                     <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
                     <ul class="sub-menu">
-                        <li><a href="administer-分类管理（标签）.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
-                        <li><a href="administer-公告发布.html"><i class="icon-font">&#xe005;</i>公告发布</a></li>
-                        <li><a href="administer-订单查询.html"><i class="icon-font">&#xe006;</i>订单查询</a></li>
+                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
+                        <li><a href="leave.html"><i class="icon-font">&#xe005;</i>公告发布</a></li>
+                        <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>订单查询</a></li>
                     </ul>
                 </li>
                 <li>
@@ -137,17 +137,14 @@
         </div>
         <div class="search-wrap">
             <div class="search-content">
-                <form>
                     <table class="search-tab">
-                        <tr>
+                        <tr >
                             <th width="70">时间:</th>
-                            <td><input  class="keyWord-text"  name="year" value="" id="year" type="text"></td>
-                            <td><input  class="keyWord-text"  name="mouth" value="" id="mouth" type="text"></td>
-                            <td><input  class="keyWord-text"  name="day" value="" id="day" type="text"></td>
-                            <td><input class="btn btn-primary btn2" name="sub" value="查询" type="submit"></td>
+                            <td><input   name="date"   type="date"  id="day"></td>
+                            <td><input id="botton"  class="btn btn-primary btn2" name="sub" value="查询"  type="button"/></td>
                         </tr>
                     </table>
-                </form>
+
             </div>
         </div>
         <div class="result-wrap">

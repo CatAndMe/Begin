@@ -14,6 +14,10 @@
         select * from sign where EmplId = #{EmplId}
     </select>
 
+    <select id="selectByDate" parameterType="int" resultType="Sign">
+        select * from sign where "time" = #{time}
+    </select>
+
     <select id="getAllSign" resultType="Sign">
         SELECT * FROM sign
     </select>
@@ -23,7 +27,11 @@
     </insert>
 
     <select id="getSignLogsByPage" resultType="Sign" parameterType="map">
-        select * from sign limit #{start},#{end}
+        select * from sign where 1=1
+         <if test="time!=null">
+                 and time LIKE concat('%',#{time},'%')
+         </if>
+         limit #{start},#{end}
     </select>
 
     <select id="getAllSignCount" parameterType="int" resultType="int">

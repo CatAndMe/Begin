@@ -23,7 +23,7 @@
 .search-tab th{text-align: right;padding-right:10px;font-weight: normal;}
 .search-tab td{padding: 0 5px;}
 .common-text{height: 23px;line-height: 23px;padding: 2px 4px;border: 1px solid #ccc;background: #fff;border-radius:5px;}
-.keyWord-text{height: 23px;width: 30px;line-height: 23px;padding: 2px 4px;border: 1px solid #ccc;background: #fff;border-radius:5px;}
+.keyWord-text{height: 23px;width: 39px;line-height: 23px;padding: 2px 4px;border: 1px solid #ccc;background: #fff;border-radius:5px;}
 .result-wrap{padding:10px 20px;border-bottom: 1px solid #e5e5e5;}
 .result-title{line-height: 35px;padding-bottom: 5px;overflow: hidden;}
 .comment-title{line-height: 35px;margin-bottom: 10px;overflow: hidden;}

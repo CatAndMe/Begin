@@ -73,10 +73,13 @@ public class ViewAction {
             //超出页码
 
         }
-        List<Sign> signList = signService.getSignLogsByPage(pageNum,pageSize);
-        pageObject.put("Data",signList);
-        pageObject.put("itemCount",signList==null?0:signList.size());
-        request.setAttribute("signList",signList);
+
+
+            List<Sign> signList = signService.getSignLogsByPage(pageNum, pageSize,date);
+            pageObject.put("Data", signList);
+            pageObject.put("itemCount", signList == null ? 0 : signList.size());
+            request.setAttribute("signList", signList);
+
         return JSONObject.fromObject(pageObject);
     }
 

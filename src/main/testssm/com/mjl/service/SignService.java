@@ -9,7 +9,8 @@ public interface SignService {
     public Sign selectByEmplName(String EmplName);
     public List<Sign> getAllSign();
     List<Sign> getSignLogsByPage(Integer page,Integer pageSize,String time);
-    List<Sign> selectByDate(String time);
+    int getAllSignCount(String time);
     int getAllSignCount();
+    boolean addSignByLeave(Sign sign);
     public boolean addSign(Sign sign);
 }

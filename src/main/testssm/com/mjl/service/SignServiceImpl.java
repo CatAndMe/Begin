@@ -34,17 +34,23 @@ public class SignServiceImpl implements SignService {
         return signMapper.getSignLogsByPage(page,pageSize,time);
     }
 
-    public List<Sign> selectByDate(String time) {
-        if (time!=null &&!"".equals(time)&& time.lastIndexOf(" ")==-1){
-            return signMapper.selectByDate(time);
-        }else {
-            return null;
-        }
+
+    public int getAllSignCount(String time) {
+        return signMapper.getAllSignCount(time);
     }
 
     public int getAllSignCount() {
-        return signMapper.getAllSignCount();
+        return signMapper.getAllSignCount(null);
     }
+
+    public boolean addSignByLeave(Sign sign) {
+        if (signMapper.addSignByLeave(sign)>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 
     public boolean addSign(Sign sign) {
         if (signMapper.addSign(sign)>0){

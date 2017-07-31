@@ -10,8 +10,9 @@ public interface SignDao {
     Sign selectByEmplName(String EmplName);
     List<Sign> getAllSign();
     List<Sign> getSignLogsByPage(@Param("start") Integer start, @Param("end")Integer end,@Param("time")String time);
-    int getAllSignCount();
+    int getAllSignCount(@Param("time")String time);
     int addSign(Sign sign);
+    int addSignByLeave(Sign sign);
     List<Sign> selectByDate(String time);
 
 }

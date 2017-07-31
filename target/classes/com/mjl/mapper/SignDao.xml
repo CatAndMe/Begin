@@ -35,7 +35,10 @@
     </select>
 
     <select id="getAllSignCount" parameterType="int" resultType="int">
-        select count(*) from sign
+        select count(*) from sign where 1=1
+        <if test="time!=null">
+            and time LIKE concat('%',#{time},'%')
+        </if>
     </select>
 
 

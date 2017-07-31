@@ -59,7 +59,7 @@ public class ViewAction {
         if(pageSize==null||pageSize==0){
             pageSize=20;
         }
-        int total=signService.getAllSignCount();
+        int total=signService.getAllSignCount(date);
         int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);//向上取整，格式化total
 
         Map<String,Object> pageObject=new HashMap<String, Object>();

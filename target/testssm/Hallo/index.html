@@ -11,47 +11,5 @@
 <h2>Hello World!</h2>
 <a href="/user/hallo.do">点击进入用户登入界面</a>
 <br>
-url: "/employee/logListByPage.do",
-type: "POST",
-data: JSON.stringify({pageNum:1,pageSize:pageSize}),
-success:function(result){
-var results = JSON.parse(result);
-var list = results.Data;
-var totalCount = results.totalItemCount;
-var pages = results.totalPages;
-var pageNo=results.pageNum;
-//获取显示数据的表格
-var table = $("#content");
-//清楚表格中内容
-$("#content tr").remove();
-if(list.length != 0){
-for(var i=0; i<list.length; i++){
-table.append(
-$("<tr><td>"+
-    list[i].formId
-    +"</td><td>"+
-    list[i].emplName
-    +"</td><td>"+
-    list[i].emplId
-    +"</td><td>"+
-    list[i].time
-    +"</td><td>"+
-    list[i].login
-    +"</td><td>"+
-    list[i].loginState
-    +"</td><td>"+
-    list[i].reason
-    +"</td><td>"+
-    list[i].trueTime
-    +"</td></tr>")
-);
-
-
-}
-
-} else{
-
-}
-},
 </body>
 </html>

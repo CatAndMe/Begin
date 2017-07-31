@@ -35,8 +35,10 @@ public class UserController {
         boolean loginType = userService.login(user.getUsername(),user.getPassword());
         if(loginType){
             //如果验证通过,则将用户信息传到前台
-            request.setAttribute("user",user);
-            it.setAttribute("user",user);
+            User user1=userService.selectByName(user.getUsername());
+            request.setAttribute("user",user1);
+            it.setAttribute("user",user1);
+
             //并跳转到success.jsp页面
             return "view/adminView";
         }else{

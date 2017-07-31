@@ -5,7 +5,50 @@
     <title>后台管理</title>
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <script type="text/javascript" src="js/libs/modernizr.min.js"></script>
+    <    <script type="text/javascript" src="jss/jquery.js"></script>
+    <script type="text/javascript" src="jss/libs/modernizr.min.js"></script>
+    <script type="text/javascript">
+        var selectState="请选择类型";
+        var selectSignOut="请选择理由";
+        function queryForPages(){
+
+
+            var params={state:selectState,reason:selectSignOut};
+            $.post("/employee/leave.do",params,
+                function(data){
+                    window.location.reload();//刷新当前页面.
+                })
+
+        }
+        $(document).ready(
+            //绑定下拉框change事件，当下来框改变时调用 SelectChange()方法
+
+            function () {
+                $("#state ").get(0).selectedIndex=0;
+                $("#signOut ").get(0).selectedIndex=0;
+
+                $("#state").change(function() {
+                    //获取下拉框选中项的value属性值
+                    selectState =$("#state").find('option:selected').text();
+                });
+                $("#signOut").change(function() {
+                    //获取下拉框选中项的value属性值
+                    selectSignOut =$("#signOut").find('option:selected').text();
+                });
+                //时间查询
+                $("#up").click(function () {
+                    if(selectState=="请选择类型"||selectSignOut=="请选择理由"){
+                        alert("请选择类型或理由");
+                    }else {
+                        alert("申请成功");
+                        queryForPages();
+                    }
+
+                });
+            }
+        );
+
+    </script>
 </head>
 <body>
 <div class="topbar-wrap white">
@@ -22,7 +65,7 @@
                 <li>
                     <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
                     <ul class="sub-menu">
-                        <li><a href="administer-分类管理（标签）.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
+                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
                         <li><a href="leave.html"><i class="icon-font">&#xe005;</i>公告发布</a></li>
                         <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>订单查询</a></li>
                     </ul>
@@ -49,44 +92,34 @@
             <div class="result-content">
 
                     <table class="insert-tab" width="100%">
-                        <tbody><tr>
-                            <th width="120"><i class="require-red">*</i>分类：</th>
+                        <tbody>
+                        <tr>
+                            <th width="120"><i class="require-red">*</i>请假类型：</th>
                             <td>
-                                <select name="colId" id="catid" class="required">
-                                    <option value="18">请选择</option>
-                                    <option value="19">运动健身</option>
-                                     <option value="20">旅游</option>
-                                    <option value="21">文学艺术</option>
-                                    <option value="22">演讲</option>
-                                    <option value="23">经济</option>
-                                    <option value="24">电影</option>
-                                    <option value="25">科技</option>
-                                    <option value="26">美食</option>
+                                <select name="colId" id="state" class="required">
+                                    <option value="18">请选择类型</option>
+                                    <option value="19">早退</option>
+                                     <option value="20">迟到</option>
                                 </select>
                             </td>
                         </tr>
-                            <tr>
-                                <th><i class="require-red">*</i>标题：</th>
-                                <td>
-                                    <input class="common-text required" id="title" name="title" size="50" value="" type="text">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th><i class="require-red">*</i>图片：</th>
-                                <td><input name="smallimg" id="" type="file"><!--<input type="submit" onclick="submitForm('/jscss/admin/design/upload')" value="上传图片"/>--></td>
-                            </tr>
-                            <tr>
-                                <th><i class="require-red">*</i>视频：</th>
-                                <td><input name="vedio" id="" type="file"><!--<input type="submit" onclick="submitForm('/jscss/admin/design/upload')" value="上传视频"/>--></td>
-                            </tr>
-                            <tr>
-                                <th>课程介绍：</th>
-                                <td><textarea name="content" class="common-textarea" id="content" cols="30" style="width: 98%;" rows="10"></textarea></td>
-                            </tr>
+                        <tr>
+                            <th width="120"><i class="require-red">*</i>请假原因：</th>
+                            <td>
+                                <select name="colId" id="signOut" class="required">
+                                    <option value="23">请选择理由</option>
+                                    <option value="24">交通原因</option>
+                                    <option value="25">病假</option>
+                                    <option value="21">事假</option>
+                                    <option value="22">其他</option>
+                                </select>
+                            </td>
+                        </tr>
+
                             <tr>
                                 <th></th>
                                 <td>
-                                    <input class="btn btn-primary btn6 mr10" value="发布" type="submit">
+                                    <input class="btn btn-primary btn6 mr10" value="提交" type="button" id="up">
                                     <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
                                 </td>
                             </tr>

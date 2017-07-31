@@ -7,7 +7,8 @@ public class Sign {
     private String time;
     private String login;
     private String loginState;
-    private String reason;
+    private String signOut;
+    private String signOutState;
     private String trueTime;
 
     public int getFormId() {
@@ -58,12 +59,20 @@ public class Sign {
         this.loginState = loginState;
     }
 
-    public String getReason() {
-        return reason;
+    public String getSignOut() {
+        return signOut;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setSignOut(String signOut) {
+        this.signOut = signOut;
+    }
+
+    public String getSignOutState() {
+        return signOutState;
+    }
+
+    public void setSignOutState(String signOutState) {
+        this.signOutState = signOutState;
     }
 
     public String getTrueTime() {

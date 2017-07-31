@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>后台管理</title>
+    <title>签到记录</title>
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <script type="text/javascript" src="jss/jquery.js"></script>
@@ -140,7 +140,7 @@
                     <table class="search-tab">
                         <tr >
                             <th width="70">时间:</th>
-                            <td><input   name="date"   type="date"  id="day"></td>
+                            <td><input   name="date"   type="date"  id="day" placeholder="格式为:XXXX-XX-XX"></td>
                             <td><input id="botton"  class="btn btn-primary btn2" name="sub" value="查询"  type="button"/></td>
                         </tr>
                     </table>
@@ -153,13 +153,13 @@
                     <table  class="result-tab" width="100%">
                         <tr>
                             <th class="tc" width="5%"></th>
-                            <th>员工名</th>
-                            <th>员工号</th>
-                            <th>签到时间</th>
-                            <th>操作</th>
-                            <th>状态</th>
-                            <th>理由</th>
-                            <th>实际时间</th>
+                            <td>员工名</td>
+                            <td>员工号</td>
+                            <td>签到时间</td>
+                            <td>操作</td>
+                            <td>状态</td>
+                            <td>理由</td>
+                            <td>实际时间</td>
 
                         </tr>
 
@@ -169,10 +169,10 @@
                     </table>
 
                     <div class="list-page">
-                        <button id="firstPage">首页</button>
-                        <button id="previous">上一页</button>
-                        <button id="next">下一页</button>
-                        <button id="last">尾页</button>
+                        <button class="btn btn-primary btn2" id="firstPage">首页</button>
+                        <button class="btn btn-primary btn2" id="previous">上一页</button>
+                        <button class="btn btn-primary btn2" id="next">下一页</button>
+                        <button class="btn btn-primary btn2" id="last">尾页</button>
                     </div>
                 </div>
         </div>

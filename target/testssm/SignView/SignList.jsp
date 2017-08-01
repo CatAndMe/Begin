@@ -39,7 +39,8 @@
              <td align="center">${sign.time}</td>
              <td align="center">${sign.login}</td>
              <td align="center">${sign.loginState}</td>
-             <td align="center">${sign.reason}</td>
+             <td align="center">${sign.signOut}</td>
+             <td align="center">${sign.signOutState}</td>
              <td align="center">${sign.trueTime}</td>
          </tr>
             </c:forEach>

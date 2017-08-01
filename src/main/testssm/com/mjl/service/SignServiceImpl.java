@@ -60,4 +60,18 @@ public class SignServiceImpl implements SignService {
         }
 
     }
+
+    public List<Sign> selectByDate(String time) {
+        time=time.toString();
+        return signMapper.selectByDate(time);
+    }
+
+    public boolean updateSignOutState(String state,String leaveTime) {
+        leaveTime=leaveTime.toString();
+        return signMapper.updateSignOutState(state,leaveTime);
+    }
+
+    public boolean updateSignOut(String hours) {
+        return false;
+    }
 }

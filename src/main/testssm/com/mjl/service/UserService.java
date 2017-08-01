@@ -9,7 +9,7 @@ import java.util.List;
  * Created by alvin on 15/9/7.
  */
 public interface UserService {
-    public boolean login(String username,String password);
+    public boolean login(int userId,String password);
     public List<User> getAllUser();
     public User selectById(Integer id);
     public User selectByName(String username);

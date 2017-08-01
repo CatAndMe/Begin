@@ -1,7 +1,9 @@
 package com.mjl.controller.LeaveAction;
 
+import com.mjl.model.Sign;
 import com.mjl.model.User;
 import com.mjl.service.SignService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //@Controller注解用于标示本类为web层控制组件
 @Controller
@@ -28,24 +33,52 @@ public class Leave {
     @RequestMapping("/leave")
     @ResponseBody
     //请假接口
-    public boolean leave(@RequestParam String state,@RequestParam String reason, HttpSession session,HttpServletRequest request){
+    public Object leave(@RequestParam String state,@RequestParam String reason,@RequestParam String leaveTime, HttpServletRequest request,HttpServletResponse response){
         String State=state;
         String Reason=reason;
+        String LeaveTime=leaveTime;
 
-        SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式login
-        System.out.println(day.format(new Date()));// new Date()为获取当前系统时间
 
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");//设置日期格式
-        System.out.println(time.format(new Date()));// new Date()为获取当前系统时间
         User user=(User)request.getSession().getAttribute("user");
 
-        int formId=signService.getAllSignCount();
+        int formId=signService.getAllSignCount()+1;
 
         int userId=user.getId();//获取id
 
         String username=user.getUsername();//获取名字
+        Map<String,Object> messageJeson=new HashMap<String, Object>();
 
+        //判断是否重复签到
+        if (state.equals("迟到")){
+            if (signService.getAllSignCount(leaveTime)==0){
+                Sign leaveSign=new Sign();
+                leaveSign.setFormId(formId);
+                leaveSign.setEmplName(username);
+                leaveSign.setTime(leaveTime);
+                leaveSign.setEmplId(userId);
+                leaveSign.setLoginState(reason);
+                signService.addSign(leaveSign);
+            }else{
+                String message="一天内不能重复签到~(～￣▽￣)～";
+                messageJeson.put("message",message);
+                return JSONObject.fromObject(messageJeson);
 
-        return true;
+            }
+
+        }else{
+            if (signService.getAllSignCount(leaveTime)==1){
+                signService.updateSignOutState(reason,leaveTime);
+
+            }else {
+                String message="这天没有签到(ToT)/~~~";
+                messageJeson.put("message",message);
+                return JSONObject.fromObject(messageJeson);
+
+            }
+
+        }
+
+        return null;
+
     }
 }

@@ -13,4 +13,7 @@ public interface SignService {
     int getAllSignCount();
     boolean addSignByLeave(Sign sign);
     public boolean addSign(Sign sign);
+    List<Sign> selectByDate(String time);
+    boolean updateSignOutState(String state,String leaveTime);
+    boolean updateSignOut(String hours);
 }

@@ -28,18 +28,20 @@
                     totalPage = results.totalPageCount;
                     rowCount = results.totalItemCount;
                     pageNo=results.pageNum;
+                    var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
                     var s = '';
 
                     if(list.length != 0){
                         for(var i=0; i<list.length; i++){
 
-                                s += '<tr><td>' +i
+                                s += '<tr><td>' +list[i].formId
                                     + '</td><td>' + list[i].emplName
                                     + '</td><td>' + list[i].emplId
                                     + '</td><td>' + list[i].time
                                     + '</td><td>' + list[i].login
                                     + '</td><td>' + list[i].loginState
-                                    + '</td><td>' + list[i].reason
+                                    + '</td><td>' + list[i].signOut
+                                    + '</td><td>' + list[i].signOutState
                                     + '</td><td>' + list[i].trueTime
                                     + '</td></tr>';
 
@@ -56,9 +58,14 @@
         $(document).ready(
             function(){
                 //时间查询
-                $("#botton").click(function(){
-                    date_=$(day).val();
-                  queryForPages();
+                $("#botton").click(function() {
+                    date_ = $(day).val();
+                    if (DATE_FORMAT.test(date_) == false) {
+                        alert("抱歉，您输入的日期格式有误，正确格式应为:2012-01-01");
+                    }else {
+                        queryForPages();
+                    }
+
                 });
 
                 //首页
@@ -152,13 +159,14 @@
                 <div class="result-content">
                     <table  class="result-tab" width="100%">
                         <tr>
-                            <th class="tc" width="5%"></th>
+                            <td class="tc" width="5%"></td>
                             <td>员工名</td>
                             <td>员工号</td>
+                            <td>日期</td>
                             <td>签到时间</td>
-                            <td>操作</td>
-                            <td>状态</td>
-                            <td>理由</td>
+                            <td>签到状态</td>
+                            <td>签退时间</td>
+                            <td>签退状态</td>
                             <td>实际时间</td>
 
                         </tr>

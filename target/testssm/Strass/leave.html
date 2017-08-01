@@ -10,13 +10,22 @@
     <script type="text/javascript">
         var selectState="请选择类型";
         var selectSignOut="请选择理由";
+        var leaveTime="";
+        var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
         function queryForPages(){
 
 
-            var params={state:selectState,reason:selectSignOut};
+            var params={state:selectState,reason:selectSignOut,leaveTime:leaveTime};
             $.post("/employee/leave.do",params,
                 function(data){
-                    window.location.reload();//刷新当前页面.
+                    if (data.message==null){
+                        window.location.reload();//刷新当前页面.
+                        alert("(づ￣3￣)づ╭❤～成功");
+                    }else {
+                        alert(data.message);
+                    }
+
+
                 })
 
         }
@@ -35,12 +44,17 @@
                     //获取下拉框选中项的value属性值
                     selectSignOut =$("#signOut").find('option:selected').text();
                 });
-                //时间查询
+
                 $("#up").click(function () {
-                    if(selectState=="请选择类型"||selectSignOut=="请选择理由"){
+                    leaveTime=$("#day").val();
+                    if(selectState=="请选择类型"||selectSignOut=="请选择理由") {
                         alert("请选择类型或理由");
-                    }else {
-                        alert("申请成功");
+                    }else if(leaveTime==""){
+                        alert("请输入请假日期");
+                    }else if(DATE_FORMAT.test(leaveTime)==false){
+                        alert("抱歉，您输入的日期格式有误，正确格式应为:2012-01-01");
+                    }else{
+//                        alert("申请成功");
                         queryForPages();
                     }
 
@@ -108,15 +122,17 @@
                             <td>
                                 <select name="colId" id="signOut" class="required">
                                     <option value="23">请选择理由</option>
-                                    <option value="24">交通原因</option>
                                     <option value="25">病假</option>
                                     <option value="21">事假</option>
                                     <option value="22">其他</option>
                                 </select>
                             </td>
                         </tr>
-
-                            <tr>
+                        <tr>
+                            <th width="120"><i class="require-red">*</i>请假日期：</th>
+                            <td><input   name="date"   type="date"  id="day" placeholder="格式为:XXXX-XX-XX"></td>
+                        </tr>
+                        <tr>
                                 <th></th>
                                 <td>
                                     <input class="btn btn-primary btn6 mr10" value="提交" type="button" id="up">

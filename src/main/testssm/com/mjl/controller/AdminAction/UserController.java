@@ -32,10 +32,11 @@ public class UserController {
         System.out.println(it);
 
         //调用login方法来验证是否是注册用户
-        boolean loginType = userService.login(user.getUsername(),user.getPassword());
+        boolean loginType = userService.login(user.getId(),user.getPassword());
         if(loginType){
             //如果验证通过,则将用户信息传到前台
-            User user1=userService.selectByName(user.getUsername());
+            User user1=userService.selectById(user.getId());
+            user1.setPassword(null);
             request.setAttribute("user",user1);
             it.setAttribute("user",user1);
 

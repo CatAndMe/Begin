@@ -27,20 +27,21 @@ public class SignServiceImpl implements SignService {
         return signMapper.getAllSign();
     }
 
-    public List<Sign> getSignLogsByPage(Integer page, Integer pageSize,String time) {
+    public List<Sign> getSignLogsByPage(Integer page, Integer pageSize,String time,Integer id) {
 //        time.replaceAll("-","");
         time=time.toString();
         page=(page-1)*pageSize;
-        return signMapper.getSignLogsByPage(page,pageSize,time);
+        return signMapper.getSignLogsByPage(page,pageSize,time,id);
     }
 
 
-    public int getAllSignCount(String time) {
-        return signMapper.getAllSignCount(time);
+    public int getAllSignCount(String time,int id) {
+            return signMapper.getAllSignCount(time,id);
+
     }
 
     public int getAllSignCount() {
-        return signMapper.getAllSignCount(null);
+        return signMapper.getAllSignCount(null,0);
     }
 
     public boolean addSignByLeave(Sign sign) {

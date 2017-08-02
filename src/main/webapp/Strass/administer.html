@@ -6,7 +6,7 @@
     <title>签到记录</title>
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <script type="text/javascript" src="jss/jquery.js"></script>
+    <script type="text/javascript" src="../StarIndex/js/jquery.js"></script>
     <script type="text/javascript" src="jss/libs/modernizr.min.js"></script>
     <script type="text/javascript">
 
@@ -16,10 +16,10 @@
         var rowCount = "4";//总条数
         var params="";//参数
         var date_="";
+        var emplId_=0;
+        var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
         function queryForPages(){
-
-
-            var params={pageNum:currentPage,pageSize:pageSize,date:date_};
+            var params={pageNum:currentPage,pageSize:pageSize,date:date_,emplId:emplId_};
             $.post("/employee/logListByPage.do",params,
                 function(data){
 //                    var results = JSON.parse(data);
@@ -28,13 +28,16 @@
                     totalPage = results.totalPageCount;
                     rowCount = results.totalItemCount;
                     pageNo=results.pageNum;
-                    var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
+                    var message=results.Message;
                     var s = '';
+                    if (message!=null){
+                        alert(message);
+                    }
 
                     if(list.length != 0){
                         for(var i=0; i<list.length; i++){
 
-                                s += '<tr><td>' +list[i].formId
+                                s += '<tr><td>' +(i+1)
                                     + '</td><td>' + list[i].emplName
                                     + '</td><td>' + list[i].emplId
                                     + '</td><td>' + list[i].time
@@ -48,14 +51,18 @@
                         }
 
                         $('#tb').html(s);
+                        $(day).val(null);
+                        $(emplId).val(null);
                     } else{
-
                         $('#tb').html("");
+                        $(day).val(null);
+                        $(emplId).val(null);
                     }
                 })
 
         }
         $(document).ready(
+
             function(){
                 //时间查询
                 $("#botton").click(function() {
@@ -65,9 +72,13 @@
                     }else {
                         queryForPages();
                     }
+                });
+                //员工号查询查询
+                $("#emplIdBotton").click(function() {
+                    emplId_ = $(emplId).val();
+                    queryForPages();
 
                 });
-
                 //首页
                 $("#firstPage").click(function(){
                     currentPage="1";
@@ -119,9 +130,9 @@
                 <li>
                     <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
                     <ul class="sub-menu">
-                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
-                        <li><a href="leave.html"><i class="icon-font">&#xe005;</i>公告发布</a></li>
-                        <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>订单查询</a></li>
+                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>记录查看</a></li>
+                        <li><a href="leave.html"><i class="icon-font">&#xe005;</i>请假申请</a></li>
+                        <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>密码修改</a></li>
                     </ul>
                 </li>
                 <li>
@@ -149,6 +160,9 @@
                             <th width="70">时间:</th>
                             <td><input   name="date"   type="date"  id="day" placeholder="格式为:XXXX-XX-XX"></td>
                             <td><input id="botton"  class="btn btn-primary btn2" name="sub" value="查询"  type="button"/></td>
+                            <th width="70">员工号:</th>
+                            <td><input   name="emplId"   type="text"  id="emplId" ></td>
+                            <td><input id="emplIdBotton"  class="btn btn-primary btn2" name="emplIdBotton" value="查询"  type="button"/></td>
                         </tr>
                     </table>
 
@@ -167,7 +181,7 @@
                             <td>签到状态</td>
                             <td>签退时间</td>
                             <td>签退状态</td>
-                            <td>实际时间</td>
+                            <td>有效工时</td>
 
                         </tr>
 

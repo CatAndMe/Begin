@@ -5,7 +5,7 @@
     <title>后台管理</title>
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <    <script type="text/javascript" src="jss/jquery.js"></script>
+    <    <script type="text/javascript" src="../StarIndex/js/jquery.js"></script>
     <script type="text/javascript" src="jss/libs/modernizr.min.js"></script>
     <script type="text/javascript">
         var selectState="请选择类型";
@@ -19,15 +19,12 @@
             $.post("/employee/leave.do",params,
                 function(data){
                     if (data.message==null){
+                        alert("(づ￣3￣)づ╭❤～成功")
                         window.location.reload();//刷新当前页面.
-                        alert("(づ￣3￣)づ╭❤～成功");
                     }else {
                         alert(data.message);
                     }
-
-
                 })
-
         }
         $(document).ready(
             //绑定下拉框change事件，当下来框改变时调用 SelectChange()方法
@@ -35,7 +32,7 @@
             function () {
                 $("#state ").get(0).selectedIndex=0;
                 $("#signOut ").get(0).selectedIndex=0;
-
+                $("#day").val(null);
                 $("#state").change(function() {
                     //获取下拉框选中项的value属性值
                     selectState =$("#state").find('option:selected').text();
@@ -79,9 +76,9 @@
                 <li>
                     <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
                     <ul class="sub-menu">
-                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>分类管理</a></li>
-                        <li><a href="leave.html"><i class="icon-font">&#xe005;</i>公告发布</a></li>
-                        <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>订单查询</a></li>
+                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>记录查看</a></li>
+                        <li><a href="leave.html"><i class="icon-font">&#xe005;</i>请假申请</a></li>
+                        <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>密码修改</a></li>
                     </ul>
                 </li>
                 <li>

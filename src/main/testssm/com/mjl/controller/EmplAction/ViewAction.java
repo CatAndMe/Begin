@@ -51,7 +51,14 @@ public class ViewAction {
 
     @RequestMapping("/logListByPage")
     @ResponseBody
-    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String date){
+    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String date,@RequestParam Integer emplId){
+        User user=(User)request.getSession().getAttribute("user");
+        Integer total=0;
+        Map<String,Object> pageObject=new HashMap<String, Object>();
+        List<Sign> signList=null;
+        if (emplId==null){
+            emplId=0;
+        }
         //处理分页参数
         if(pageNum==null||pageNum==0){
             pageNum=1;
@@ -59,10 +66,25 @@ public class ViewAction {
         if(pageSize==null||pageSize==0){
             pageSize=20;
         }
-        int total=signService.getAllSignCount(date);
+        //是否做了员工号查询
+        if (emplId==0){
+            //否，显示管理员和非管理员的内容
+            if (user.getEmplAdmin()>0){
+                total=signService.getAllSignCount(date,emplId);
+            }else {
+                total=signService.getAllSignCount(date,user.getId());
+            }
+        }else {
+            //是，如果是管理员则查询
+            if (user.getEmplAdmin()>0){
+                total=signService.getAllSignCount(date,emplId);
+            }else {
+                total=signService.getAllSignCount(date,user.getId());
+            }
+        }
         int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);//向上取整，格式化total
 
-        Map<String,Object> pageObject=new HashMap<String, Object>();
+
         pageObject.put("pageNum",pageNum); //页码
         pageObject.put("pageSize",pageSize);//页数
         pageObject.put("totalItemCount",total);  //总条目数
@@ -74,8 +96,25 @@ public class ViewAction {
 
         }
 
-
-            List<Sign> signList = signService.getSignLogsByPage(pageNum, pageSize,date);
+//是否做了员工号查询
+        if (emplId==0){
+            //否，显示管理员和非管理员的内容
+            if (user.getEmplAdmin()>0){
+                signList = signService.getSignLogsByPage(pageNum, pageSize,date,emplId);
+            }else {
+                signList = signService.getSignLogsByPage(pageNum, pageSize,date,user.getId());
+            }
+        }else {
+            //是，如果是管理员则查询
+            if (user.getEmplAdmin()>0){
+                signList = signService.getSignLogsByPage(pageNum, pageSize,date,emplId);
+            }else {
+                signList = signService.getSignLogsByPage(pageNum, pageSize,date,user.getId());
+                if ((Integer)emplId!=(Integer)user.getId()==true){
+                    pageObject.put("Message","没有查询权限(*＾-＾*)");
+                }
+            }
+        }
             pageObject.put("Data", signList);
             pageObject.put("itemCount", signList == null ? 0 : signList.size());
             request.setAttribute("signList", signList);

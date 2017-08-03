@@ -22,14 +22,14 @@
 						<h3>欢迎你</h3>
 							<div class="input_outer">
 								<span class="u_user"></span>
-								<input name="logname" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入账户">
+								<input name="logname" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入账户" id="login">
 							</div>
 							<div class="input_outer">
 								<span class="us_uer"></span>
-								<input name="logpass" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;"value="" type="password" placeholder="请输入密码">
+								<input name="logpass" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;"value="" type="password" placeholder="请输入密码" id="password">
 							</div>
 							<div class="mb2">
-                                <a    class="act-but submit" href="javascript:void (0)";  style="color: #FFFFFF" >登录</a>
+                                <a class="act-but submit" href="javascript:void (0)";  style="color: #FFFFFF" >登录</a>
                             </div>
 					</div>
 				</div>
@@ -42,20 +42,41 @@
 		<script src="js/rAF.js"></script>
 		<script src="js/demo-1.js"></script>
 		<script type="text/javascript">
-            var leaveTime="";
-            var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
+            var login_="";
+            var password_="";
+            var LOGINID_FORMAT = /^[0-9]*$/;
+            var PASSWORD_FORMAT =/[0-9A-Za-z]/;
             function queryForPages(){
-                var params={state:selectState,reason:selectSignOut,leaveTime:leaveTime};
-                $.post("/employee/leave.do",params,
+                var params={loginId:login_,password:password_};
+                $.post("/user/login.do",params,
                     function(data){
+                        if (data.message==true){
+                            window.location.href = "http://localhost:822/Strass/administer.html";
+                        }else {
+                            alert("(╯▽╰)用户账号或密码输入错误");
+                        }
 
                     })
             }
             $(document).ready(
+
                 function () {
+                    $(login).val(null);
+                    $(password).val(null);
+
                     $("a").click(function(){
-                        alert("抱歉，您输入的日期格式有误，正确格式应为:2012-01-01");
-                        location.href=url;
+                        login_=$(login).val();
+                        password_=$(password).val();
+                        if(login_==null||password_==null){
+                            alert("(＝。＝)账号密码不能为空");
+                        }else if(LOGINID_FORMAT.test(login_)==false){
+                            alert("(⊙_⊙?)账号只能为纯数字");
+                        }else if(PASSWORD_FORMAT.test(password_)==false){
+                            alert("╮(╯_╰)╭密码里有特殊字符");
+                        }else {
+                            queryForPages();
+                        }
+
                     });
                 }
             );

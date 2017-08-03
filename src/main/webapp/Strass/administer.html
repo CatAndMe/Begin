@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <script type="text/javascript" src="../StarIndex/js/jquery.js"></script>
-    <script type="text/javascript" src="jss/libs/modernizr.min.js"></script>
+    <script type="text/javascript" src="../StarIndex/js/libs/modernizr.min.js"></script>
     <script type="text/javascript">
 
         var pageSize = "8";//每页行数
@@ -18,6 +18,7 @@
         var date_="";
         var emplId_=0;
         var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
+        var EMOLID_FORMAT = /^[0-9]*$/;
         function queryForPages(){
             var params={pageNum:currentPage,pageSize:pageSize,date:date_,emplId:emplId_};
             $.post("/employee/logListByPage.do",params,
@@ -64,19 +65,17 @@
         $(document).ready(
 
             function(){
-                //时间查询
-                $("#botton").click(function() {
+                //员工号查询查询
+                $("#emplIdBotton").click(function() {
                     date_ = $(day).val();
-                    if (DATE_FORMAT.test(date_) == false) {
-                        alert("抱歉，您输入的日期格式有误，正确格式应为:2012-01-01");
+                    emplId_ = $(emplId).val();
+                    if (DATE_FORMAT.test(date_) == false && date_!="") {
+                        alert("(＞﹏＜)您输入的日期格式有误，正确格式应为:2012-01-01");
+                    }else if(EMOLID_FORMAT.test(emplId_)==false && emplId_!=null){
+                        alert("(＞﹏＜)您输入的员工号格式有误,请输入数字");
                     }else {
                         queryForPages();
                     }
-                });
-                //员工号查询查询
-                $("#emplIdBotton").click(function() {
-                    emplId_ = $(emplId).val();
-                    queryForPages();
 
                 });
                 //首页
@@ -151,7 +150,7 @@
     <div class="main-wrap">
 
         <div class="crumb-wrap">
-            <div class="crumb-list"><i class="icon-font"></i><a href="index.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">分类管理</span></div>
+            <div class="crumb-list"><i class="icon-font"></i><a href="index.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">记录查询</span></div>
         </div>
         <div class="search-wrap">
             <div class="search-content">
@@ -159,7 +158,6 @@
                         <tr >
                             <th width="70">时间:</th>
                             <td><input   name="date"   type="date"  id="day" placeholder="格式为:XXXX-XX-XX"></td>
-                            <td><input id="botton"  class="btn btn-primary btn2" name="sub" value="查询"  type="button"/></td>
                             <th width="70">员工号:</th>
                             <td><input   name="emplId"   type="text"  id="emplId" ></td>
                             <td><input id="emplIdBotton"  class="btn btn-primary btn2" name="emplIdBotton" value="查询"  type="button"/></td>
@@ -182,7 +180,6 @@
                             <td>签退时间</td>
                             <td>签退状态</td>
                             <td>有效工时</td>
-
                         </tr>
 
                         <tbody class="result-tab" width="100%" id="tb" style="align-content: center"></tbody>

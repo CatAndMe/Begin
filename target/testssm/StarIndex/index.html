@@ -29,7 +29,7 @@
 								<input name="logpass" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;"value="" type="password" placeholder="请输入密码" id="password">
 							</div>
 							<div class="mb2">
-                                <a    class="act-but submit" href="javascript:void (0)";  style="color: #FFFFFF" >登录</a>
+                                <a class="act-but submit" href="javascript:void (0)";  style="color: #FFFFFF" >登录</a>
                             </div>
 					</div>
 				</div>
@@ -67,7 +67,7 @@
                     $("a").click(function(){
                         login_=$(login).val();
                         password_=$(password).val();
-                        if(login_==null||password_==null){
+                        if(password_=="" || login_=="" ){
                             alert("(＝。＝)账号密码不能为空");
                         }else if(LOGINID_FORMAT.test(login_)==false){
                             alert("(⊙_⊙?)账号只能为纯数字");

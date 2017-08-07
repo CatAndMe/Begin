@@ -16,7 +16,7 @@
             var params={fistInput:fistInput_,secondInput:secondInput_};
             $.post("/user/modifyPassword.do",params,
                 function(data){
-                    if (data.message==null){
+                    if (data.message==true){
                         alert("(づ￣3￣)づ╭❤～成功");
                     }else {
                         alert("(づ￣3￣)づ╭❤～失败");

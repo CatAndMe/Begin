@@ -23,6 +23,10 @@
         SELECT * FROM sign
     </select>
 
+    <select id="getAllSignById" resultType="Sign">
+        SELECT * FROM sign WHERE emplId=#{id}
+    </select>
+
     <insert id="addSign" parameterType="Sign">
         insert into sign(formId,emplName,emplId,time,login,loginState,signOut,signOutState,trueTime) values (#{formId},#{emplName},#{emplId},#{time},#{login},#{loginState},#{signOut},#{signOutState},#{trueTime})
     </insert>
@@ -53,6 +57,6 @@
     </insert>
 
     <update id="updateSignOutState"  parameterType="String" >
-        UPDATE sign SET signOutState = #{signOutState} WHERE time = #{time}
+        UPDATE sign SET signOutState = #{signOutState} and signOut=#{signOut} WHERE time = #{time}
     </update>
 </mapper>

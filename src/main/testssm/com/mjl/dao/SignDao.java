@@ -9,11 +9,12 @@ public interface SignDao {
     Sign selectByEmplId(Integer EmplId);
     Sign selectByEmplName(String EmplName);
     List<Sign> getAllSign();
+    List<Sign> getAllSignById(@Param("id")Integer id);
     List<Sign> getSignLogsByPage(@Param("start") Integer start, @Param("end")Integer end,@Param("time")String time,@Param("id")Integer id);
     int getAllSignCount(@Param("time")String time,@Param("id")int id);
     int addSign(Sign sign);
     int addSignByLeave(Sign sign);
     List<Sign> selectByDate(String time);
-    boolean updateSignOutState(@Param("signOutState")String signOutState,@Param("time") String time);
+    boolean updateSignOutState(@Param("signOut")String signOut,@Param("signOutState")String signOutState,@Param("time") String time);
 
 }

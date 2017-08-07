@@ -67,7 +67,7 @@
                     $("a").click(function(){
                         login_=$(login).val();
                         password_=$(password).val();
-                        if(login_==null||password_==null){
+                        if(password_=="" || login_=="" ){
                             alert("(＝。＝)账号密码不能为空");
                         }else if(LOGINID_FORMAT.test(login_)==false){
                             alert("(⊙_⊙?)账号只能为纯数字");

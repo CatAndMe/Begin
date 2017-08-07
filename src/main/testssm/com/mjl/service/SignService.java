@@ -2,6 +2,7 @@ package com.mjl.service;
 
 import com.mjl.model.Sign;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface SignService {
@@ -16,4 +17,8 @@ public interface SignService {
     List<Sign> selectByDate(String time);
     boolean updateSignOutState(String state,String leaveTime);
     boolean updateSignOut(String hours);
+    List<Sign> getAllSignById(Integer id);
+    String signLogin(Integer emplId,String date,String time) throws ParseException;
+    String signOut(Integer emplId,String date,String time) throws ParseException;
+
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class ViewAction {
 
     @RequestMapping("/logListByPage")
     @ResponseBody
-    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String date,@RequestParam Integer emplId){
+    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String date,@RequestParam Integer emplId) throws ParseException {
         User user=(User)request.getSession().getAttribute("user");
         Integer total=0;
         Map<String,Object> pageObject=new HashMap<String, Object>();
@@ -118,7 +119,8 @@ public class ViewAction {
             pageObject.put("Data", signList);
             pageObject.put("itemCount", signList == null ? 0 : signList.size());
             request.setAttribute("signList", signList);
-
+//            String message=signService.signLogin(1,"2017-09-26","10:00:00");
+//            System.out.println(message);
         return JSONObject.fromObject(pageObject);
     }
 

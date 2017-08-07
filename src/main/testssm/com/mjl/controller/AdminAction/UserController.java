@@ -2,6 +2,7 @@ package com.mjl.controller.AdminAction;
 
 import com.mjl.model.User;
 import com.mjl.service.UserService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,7 @@ public class UserController {
             messageJeson.put("message",message);
             return messageJeson;
         }
+
        }
 
     @RequestMapping("/modifyPassword")
@@ -64,11 +66,12 @@ public class UserController {
             user.setPassword(secondInput);
             userService.updateUserById(user);
             message=true;
-            return messageJeson.put("message",message);
+            messageJeson.put("message",message);
+            return JSONObject.fromObject(messageJeson);
         }else {
             message=false;
             messageJeson.put("message",message);
-            return messageJeson;
+            return JSONObject.fromObject(messageJeson);
         }
 
     }

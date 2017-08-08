@@ -15,6 +15,6 @@ public interface SignDao {
     int addSign(Sign sign);
     int addSignByLeave(Sign sign);
     List<Sign> selectByDate(String time);
-    boolean updateSignOutState(@Param("signOut")String signOut,@Param("signOutState")String signOutState,@Param("time") String time);
+    boolean updateSignOutState(@Param("signOut")String signOut,@Param("signOutState")String signOutState,@Param("time") String time,@Param("trueTime")String trueTime,@Param("formId")Integer formId);
 
 }

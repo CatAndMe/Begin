@@ -12,13 +12,11 @@ public interface SignService {
     List<Sign> getSignLogsByPage(Integer page,Integer pageSize,String time,Integer id);
     int getAllSignCount(String time,int id);
     int getAllSignCount();
-    boolean addSignByLeave(Sign sign);
     public boolean addSign(Sign sign);
     List<Sign> selectByDate(String time);
-    boolean updateSignOutState(String state,String leaveTime);
-    boolean updateSignOut(String hours);
     List<Sign> getAllSignById(Integer id);
     String signLogin(Integer emplId,String date,String time) throws ParseException;
     String signOut(Integer emplId,String date,String time) throws ParseException;
-
+    boolean late(Integer emplId,String date,String time,String state)throws ParseException;
+    boolean updateSignOutState(Integer emplId,String state,String leaveTime,String trueTime)throws ParseException;
 }

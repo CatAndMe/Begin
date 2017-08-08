@@ -119,8 +119,8 @@ public class ViewAction {
             pageObject.put("Data", signList);
             pageObject.put("itemCount", signList == null ? 0 : signList.size());
             request.setAttribute("signList", signList);
-//            String message=signService.signLogin(1,"2017-09-26","10:00:00");
-//            System.out.println(message);
+            boolean message=signService.updateSignOutState(1,"忘签","08:00:00","2017:05:29");
+            System.out.println(message);
         return JSONObject.fromObject(pageObject);
     }
 

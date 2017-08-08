@@ -2,6 +2,7 @@ package com.mjl.controller.SignAction;
 
 import com.mjl.model.Sign;
 import com.mjl.service.SignService;
+import net.sf.json.JSONObject;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //@Controller注解用于标示本类为web层控制组件
 @Controller
@@ -27,59 +30,74 @@ public class SignAction {
     //显示所有的记录
     @RequestMapping("/SignIn")
     @ResponseBody
-    public void SignIn(HttpSession session, HttpServletRequest request, @RequestParam Integer emplId, @RequestParam String date, @RequestParam String time){
+    public Object SignIn(HttpSession session, HttpServletRequest request, @RequestParam Integer emplId, @RequestParam String date, @RequestParam String time) throws ParseException {
         List<Sign> signLog=signService.getAllSignById(emplId);
         Sign lastSignLog=signLog.get(signLog.size()-1);
+        String message=null;
+        Map<String,Object> signObject=new HashMap<String, Object>();
+
         //判断日期是否是今日
         if (time.toString().equals(lastSignLog.getTime())){
             //签退
-            try {
-                signService.signOut(emplId,date,time);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            message=signService.signOut(emplId,date,time);
+            if (message.equals("成功")==true){
+                return JSONObject.fromObject(signObject.put("message",message));
+            }else if (message.equals("确认早退")==true){
+                return JSONObject.fromObject(signObject.put("message",message));
+            }else if (message.equals("用户不存在")==true){
+                return JSONObject.fromObject(signObject.put("message",message));
+            }else {
+                return JSONObject.fromObject(signObject.put("message",message));
             }
-
         }else {
             //判断之前是否签退
             if (lastSignLog.getSignOut()==null){
                 //返回前台补签
-
+                return JSONObject.fromObject(signObject.put("message","补签退"));
             }else {
                 //新建签到记录
-                try {
-                    signService.signLogin(emplId,date,time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                message=signService.signLogin(emplId,date,time);
+                if (message.equals("成功")==true){
+                    return JSONObject.fromObject(signObject.put("message",message));
+                }else if (message.equals("确认迟到")==true){
+                    return JSONObject.fromObject(signObject.put("message",message));
+                }else if (message.equals("用户不存在")==true){
+                    return JSONObject.fromObject(signObject.put("message",message));
+                }else {
+                    return JSONObject.fromObject(signObject.put("message",message));
                 }
+
             }
         }
     }
 
     @RequestMapping("/Late")
     @ResponseBody
-    public  void Late(HttpServletRequest request, HttpSession session, @RequestParam String reason){
+    public  void Late(HttpSession session, HttpServletRequest request, @RequestParam Integer emplId, @RequestParam String date, @RequestParam String time,@RequestParam String reason) throws ParseException {
         if (reason.equals("确认")){
-
+            signService.late(emplId,date,time,reason);
         }else if (reason.equals("病假")){
-
+            signService.late(emplId,date,time,reason);
         }else if (reason.equals("事假")){
-
+            signService.late(emplId,date,time,reason);
         }else {
-
+            signService.late(emplId,date,time,reason);
         }
     }
 
     @RequestMapping("/Leave")
     @ResponseBody
-    public  void Leave(HttpServletRequest request, HttpSession session, @RequestParam String reason){
+    public  void Leave(HttpSession session, HttpServletRequest request, @RequestParam Integer emplId, @RequestParam String date, @RequestParam String time,@RequestParam String reason) throws ParseException {
         if (reason.equals("确认")){
-
+            signService.updateSignOutState(emplId,reason,time,date);
         }else if (reason.equals("病假")){
-
+            signService.updateSignOutState(emplId,reason,time,date);
         }else if (reason.equals("事假")){
-
+            signService.updateSignOutState(emplId,reason,time,date);
+        }else if(reason.equals("加班")){
+            signService.updateSignOutState(emplId,reason,time,date);
         }else {
-
+            signService.updateSignOutState(emplId,reason,time,date);
         }
     }
 

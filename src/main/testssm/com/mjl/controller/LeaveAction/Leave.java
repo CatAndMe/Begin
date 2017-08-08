@@ -67,7 +67,7 @@ public class Leave {
 
         }else{
             if (signService.getAllSignCount(leaveTime,userId)==1){
-                signService.updateSignOutState(reason,leaveTime);
+//                signService.updateSignOutState(reason,leaveTime);
             }else {
                 String message="这天没有签到(ToT)/~~~";
                 messageJeson.put("message",message);

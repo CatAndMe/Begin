@@ -1,0 +1,193 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>签到记录</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script type="text/javascript" src="../StarIndex/js/jquery.js"></script>
+    <script type="text/javascript" src="../StarIndex/js/libs/modernizr.min.js"></script>
+    <script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.core.js"></script>
+    <script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.dialog.js"></script>
+    <script type="text/javascript">
+
+        var pageSize = "8";//每页行数
+        var currentPage = "1";//当前页
+        var totalPage = "4";//总页数
+        var rowCount = "4";//总条数
+        var params="";//参数
+        var date_="";
+        var emplId_=0;
+        var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
+        var EMOLID_FORMAT = /^[0-9]*$/;
+        function queryForPages(){
+            var params={pageNum:currentPage,pageSize:pageSize,date:date_,emplId:emplId_};
+            $.post("/employee/logListByPage.do",params,
+                function(data){
+//                    var results = JSON.parse(data);
+                    var results = data;
+                    var list = results.Data;
+                    totalPage = results.totalPageCount;
+                    rowCount = results.totalItemCount;
+                    pageNo=results.pageNum;
+                    var message=results.Message;
+                    var s = '';
+                    if (message!=null){
+                        alert(message);
+                    }
+
+                    if(list.length != 0){
+                        for(var i=0; i<list.length; i++){
+
+                            s += '<tr><td>' +(i+1)
+                                + '</td><td>' + list[i].EmplName
+                                + '</td><td>' + list[i].EmplId
+                                + '</td><td>' + list[i].EmplEmail
+                                + '</td><td>' + list[i].EmplAdmin
+                                + '</td><INPUT TYPE="button" VALUE="按钮" ONCLICK="" id="an"><td>'
+                                + '</td></tr>';
+
+                        }
+
+                        $('#tb').html(s);
+                        $(emplId).val(null);
+                    } else{
+                        $('#tb').html("");
+                        $(emplId).val(null);
+                    }
+                })
+
+        }
+        $(document).ready(
+
+            function(){
+
+
+                //员工号查询查询
+                $("#emplIdBotton").click(function() {
+                    emplId_ = $(emplId).val();
+                    if(EMOLID_FORMAT.test(emplId_)==false && emplId_!=null){
+                        alert("(＞﹏＜)您输入的员工号格式有误,请输入数字");
+                    }else {
+                        queryForPages();
+                    }
+
+                });
+                //首页
+                $("#firstPage").click(function(){
+                    currentPage="1";
+                    queryForPages();
+                });
+                //上一页
+                $("#previous").click(function(){
+                    if(currentPage>1)
+                    {
+                        currentPage-- ;
+                    }
+                    queryForPages();
+                });
+                //下一页
+                $("#next").click(function(){
+                    if(currentPage<totalPage)
+                    {
+                        currentPage++ ;
+                    }
+                    queryForPages();
+                });
+                //尾页
+                $("#last").click(function(){
+                    currentPage = totalPage;
+                    queryForPages();
+                });
+                queryForPages();
+            }
+        );
+
+    </script>
+
+</head>
+<body>
+<div class="topbar-wrap white">
+    <div class="topbar-inner clearfix">
+        <div class="topbar-logo-wrap clearfix">
+            <h1 class="topbar-logo none"><a href="index.html" class="navbar-brand">后台管理</a></h1>
+        </div>
+    </div>
+</div>
+<div class="container clearfix">
+    <div class="sidebar-wrap">
+        <div class="sidebar-title">
+            <h1>菜单</h1>
+        </div>
+        <div class="sidebar-content">
+            <ul class="sidebar-list">
+                <li>
+                    <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
+                    <ul class="sub-menu">
+                        <li><a href="administer.html"><i class="icon-font">&#xe008;</i>记录查看</a></li>
+                        <!--<li><a href="leave.html"><i class="icon-font">&#xe005;</i>请假申请</a></li>-->
+                        <li><a href="ChangeInfo.html"><i class="icon-font">&#xe006;</i>密码修改</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="icon-font">&#xe018;</i>系统管理</a>
+                    <ul class="sub-menu">
+                        <li><a href="emplInfo.html"><i class="icon-font">&#xe006;</i>员工信息查看</a></li>
+                        <li><a href="system.html"><i class="icon-font">&#xe037;</i>清理缓存</a></li>
+                        <li><a href="system.html"><i class="icon-font">&#xe046;</i>数据备份</a></li>
+                        <li><a href="system.html"><i class="icon-font">&#xe045;</i>数据还原</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/sidebar-->
+    <div class="main-wrap">
+
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="index.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">记录查询</span></div>
+        </div>
+        <div class="search-wrap">
+            <div class="search-content">
+                <table class="search-tab">
+                    <tr >
+                        <th width="70">员工号:</th>
+                        <td><input   name="emplId"   type="text"  id="emplId" ></td>
+                        <td><input id="emplIdBotton"  class="btn btn-primary btn2" name="emplIdBotton" value="查询"  type="button"/></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <div class="result-wrap">
+
+            <div class="result-content">
+                <table  class="result-tab" width="100%">
+                    <tr>
+                        <td class="tc" width="5%"></td>
+                        <td>员工名</td>
+                        <td>员工号</td>
+                        <td>员工邮箱</td>
+                        <td>权限</td>
+                        <td>操作</td>
+                    </tr>
+
+                    <tbody class="result-tab" width="100%" id="tb" style="align-content: center"></tbody>
+
+
+                </table>
+
+                <div class="list-page">
+                    <button class="btn btn-primary btn2" id="firstPage">首页</button>
+                    <button class="btn btn-primary btn2" id="previous">上一页</button>
+                    <button class="btn btn-primary btn2" id="next">下一页</button>
+                    <button class="btn btn-primary btn2" id="last">尾页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/main-->
+</div>
+</body>
+</html>

@@ -3,14 +3,20 @@ import com.mjl.model.Sign;
 import com.mjl.model.User;
 import com.mjl.service.SignService;
 import com.mjl.service.UserService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 冰开水 on 2017/7/18.
@@ -30,13 +36,44 @@ public class UserAction {
 
 
     @RequestMapping("/userList")
-    public String list(HttpServletRequest request){
-//        List<User> userList = userService.getAllUser();
-//        request.setAttribute("userList",userList);
-//        return "view/list";
-        List<Sign> signList = signService.getAllSign();
-        request.setAttribute("signList",signList);
-        return "SignView/SignList";
+    @ResponseBody
+    public Object list(Model model, HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String emplName_, @RequestParam Integer emplId_){
+        User user=(User)request.getSession().getAttribute("user");
+        Integer total=0;
+        Map<String,Object> pageObject=new HashMap<String, Object>();
+        List<User> emplList;
+        if (emplId_==null){
+            emplId_=0;
+        }
+        //处理分页参数
+        if(pageNum==null||pageNum==0){
+            pageNum=1;
+        }
+        if(pageSize==null||pageSize==0){
+            pageSize=20;
+        }
+        //是否做了员工号查询
+        total=userService.gerAllUserCount(emplName_,emplId_);
+
+        int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);//向上取整，格式化total
+
+        pageObject.put("pageNum",pageNum); //页码
+        pageObject.put("pageSize",pageSize);//页数
+        pageObject.put("totalItemCount",total);  //总条目数
+        pageObject.put("totalPageCount",totalPages);//总页面
+        pageObject.put("hasNextPage",pageNum<totalPages);
+        pageObject.put("hasPrefPage",pageNum>1);
+        if(pageNum>totalPages){
+            //超出页码
+
+        }
+        //是否做了员工号查询
+        emplList=userService.gerUserByPage(pageNum,pageSize,emplName_,emplId_);
+        pageObject.put("Data", emplList);
+        pageObject.put("itemCount", emplList == null ? 0 : emplList.size());
+        request.setAttribute("signList", emplList);
+
+        return JSONObject.fromObject(pageObject);
     }
 
     @RequestMapping("/add")

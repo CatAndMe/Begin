@@ -1,6 +1,7 @@
 package com.mjl.service;
 
 import com.mjl.dao.IUserDao;
+import com.mjl.model.Sign;
 import com.mjl.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -83,6 +84,19 @@ public class UserServiceImpl implements UserService{
             return false;
         }
 
+    }
+
+    public Integer gerAllUserCount(String emplName, Integer emplId) {
+
+        return Mapper.gerAllUserCount(emplName,emplId);
+    }
+
+    public List<User> gerUserByPage(Integer page, Integer pageSize, String emplName, Integer emplId) {
+//        time.replaceAll("-","");
+        emplName=emplName.toString();
+        Integer EmplId=emplId;
+        page=(page-1)*pageSize;
+        return Mapper.getUserByPage(page,pageSize,emplName,EmplId);
     }
 
 

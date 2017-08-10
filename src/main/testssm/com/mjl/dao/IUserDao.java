@@ -1,6 +1,7 @@
 package com.mjl.dao;
 
 import com.mjl.model.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public interface IUserDao {
     //这里以接口形式定义了数据库操作方法,我们只需
     // 在Mybatis映射文件中对其进行映射就可以直接使用
-    public User selectById(Integer EmplId);
-    public User selectByName(String EmplName);
+    User selectById(Integer EmplId);
+    User selectByName(String EmplName);
     List<User> getAllUser();
-    public boolean addUser(User user);
-    public boolean deleteById(Integer EmplId);
-    public boolean updateUserById(User user);
+    List<User> getUserByPage(@Param("start") Integer start, @Param("end")Integer end,@Param("emplName")String emplName,@Param("emplId")Integer emplId);
+    Integer gerAllUserCount(@Param("EmplName")String EmplName,@Param("EmplId")Integer EmplId);
+    boolean addUser(User user);
+    boolean deleteById(Integer EmplId);
+    boolean updateUserById(User user);
 }

@@ -20,7 +20,7 @@ public class HanderInerceptorl implements HandlerInterceptor {
         //获取请求的url
         User user=(User)request.getSession().getAttribute("user");
 
-        if(user!=null   ){
+        if(user!=null){
             return true;
         }else{
             return false;

@@ -11,9 +11,11 @@ import java.util.List;
 public interface UserService {
     public boolean login(int userId,String password);
     public List<User> getAllUser();
+    public List<User> gerUserByPage(Integer page, Integer pageSize, String emplName, Integer emplId);
     public User selectById(Integer id);
     public User selectByName(String username);
     public boolean addUser(User useradd);
     public boolean deleteById(Integer id);
     public boolean updateUserById(User userUpdate);
+    public Integer gerAllUserCount(String emplName,Integer emplId);
 }

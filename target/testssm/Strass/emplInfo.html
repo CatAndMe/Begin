@@ -1,15 +1,45 @@
 
 <!doctype html>
-<html>
+<html >
 <head>
     <meta charset="UTF-8">
     <title>签到记录</title>
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <style type="text/css">
+
+        .pop-box {
+            /*弹出窗口后，弹出的DIV采用此CSS，保证置于最上层
+             z-index控制Z轴的坐标，数值越大，离用户越近
+            */
+            border-radius:10px;
+            z-index: 9999999; /*这个数值要足够大，才能够显示在最上层*/
+            margin-bottom: 3px;
+            display: none;
+            position: absolute;
+            background: #f2f2f2;
+            border: solid 3px #286a3a;
+        }
+
+        #bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /*弹出窗口后，添加遮罩层，采用此CSS，将该层置于弹出DIV和页面层之间
+             z-index控制Z轴的坐标，数值越大，离用户越近 rgba(72, 74, 68, 0.46)
+            */
+            z-index: 1001;
+            background-color: #000000;
+            -moz-opacity: 0.7;
+            opacity: .70;
+            filter: alpha(opacity = 70);
+        }
+
+    </style>
     <script type="text/javascript" src="../StarIndex/js/jquery.js"></script>
     <script type="text/javascript" src="../StarIndex/js/libs/modernizr.min.js"></script>
-    <script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.core.js"></script>
-    <script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.dialog.js"></script>
     <script type="text/javascript">
 
         var pageSize = "8";//每页行数
@@ -17,13 +47,12 @@
         var totalPage = "4";//总页数
         var rowCount = "4";//总条数
         var params="";//参数
-        var date_="";
+        var emplName_="";
         var emplId_=0;
-        var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
         var EMOLID_FORMAT = /^[0-9]*$/;
         function queryForPages(){
-            var params={pageNum:currentPage,pageSize:pageSize,date:date_,emplId:emplId_};
-            $.post("/employee/logListByPage.do",params,
+            var params={pageNum:currentPage,pageSize:pageSize,emplName_:emplName_,emplId_:emplId_};
+            $.post("/Action/userList.do",params,
                 function(data){
 //                    var results = JSON.parse(data);
                     var results = data;
@@ -41,11 +70,11 @@
                         for(var i=0; i<list.length; i++){
 
                             s += '<tr><td>' +(i+1)
-                                + '</td><td>' + list[i].EmplName
-                                + '</td><td>' + list[i].EmplId
-                                + '</td><td>' + list[i].EmplEmail
-                                + '</td><td>' + list[i].EmplAdmin
-                                + '</td><INPUT TYPE="button" VALUE="按钮" ONCLICK="" id="an"><td>'
+                                + '</td><td>' + list[i].username
+                                + '</td><td>' + list[i].id
+                                + '</td><td>' + list[i].email
+                                + '</td><td>' + list[i].emplAdmin
+                                + '</td><td><input TYPE="button" VALUE="按钮" ONCLICK="" id="an">'
                                 + '</td></tr>';
 
                         }
@@ -59,10 +88,53 @@
                 })
 
         }
+        function popupDiv(div_id) {
+            // 获取传入的DIV
+            var $div_obj = $("#" + div_id);
+            // 计算机屏幕高度
+            var windowWidth = $(document.body).width();
+            // 计算机屏幕长度
+            var windowHeight = $(document.body).height();
+            // 取得传入DIV的高度
+            var popupHeight = $div_obj.height();
+            // 取得传入DIV的长度
+            var popupWidth = $div_obj.width();
+
+            // // 添加并显示遮罩层
+            $("<div id='bg'></div>").width(windowWidth)
+                .height(windowHeight).click(function() {
+                //hideDiv(div_id);
+            }).appendTo("body").fadeIn(200);
+
+            // 显示弹出的DIV
+            $div_obj.css({
+                "position" : "absloute",
+                "left" : windowWidth / 2 - popupWidth / 2.3,
+                "top" : windowHeight / 2.3 - popupHeight /2.3,
+                "opacity" : "show"
+            }).animate({
+
+                opacity : "show"
+            }, "slow");
+
+        }
+        /*隐藏弹出DIV*/
+        function hideDiv(div_id) {
+            $("#bg").remove();
+            $("#" + div_id).animate({
+//                left : 0,
+//                top : 0,
+                opacity : "hide"
+            }, "slow");
+        }
         $(document).ready(
 
             function(){
 
+                $('#basic-modal .basic').click(function () {
+                    $('#basic-modal-content').modal();
+                    return false;
+                });
 
                 //员工号查询查询
                 $("#emplIdBotton").click(function() {
@@ -183,6 +255,33 @@
                     <button class="btn btn-primary btn2" id="previous">上一页</button>
                     <button class="btn btn-primary btn2" id="next">下一页</button>
                     <button class="btn btn-primary btn2" id="last">尾页</button>
+                    <input type="button" value="21" onclick="popupDiv('pop-div')" style="cursor: pointer;">
+                </div>
+                <div id='pop-div' style="width: 250px;height:250px;" class="pop-box">
+                    <br>
+                    <h3 style="text-align:center;font-size:20px">信息修改</h3>
+                    <h4 style="text-align:center;border-top:3px solid #286a3a"></h4>
+                    <br>
+                    <div style="text-align:center">
+                        <tr>
+                            <th style="font-size: 16px">密码修改：</th>
+                            <td><input type="text" style="width: 90px"/></td>
+
+                        </tr>
+                        <br>
+                        <br>
+                        <tr>
+                            <th style="font-size: 16px">邮箱修改：</th>
+                            <td><input type="text" style="width: 90px"/></td>
+                        </tr>
+                        <br>
+                        <br>
+                        <div id='buttonPanel'  style="text-align:center">
+                            <input style="margin:0 20px" type="button" value="Close" id="btn2" class="btn btn-primary btn2" onclick="hideDiv('pop-div') ;" />
+                            <input style="margin:0 20px" type="button" value="Close" id="btn1" class="btn btn-primary btn2" onclick="hideDiv('pop-div');" />
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

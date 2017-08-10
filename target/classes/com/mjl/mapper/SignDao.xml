@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace用于与DAO层的接口类进行绑定,这样我们无需实现DAO层的接口
+类,其接口类就能够自动的找到相关的SQL语句进行绑定实现-->
+<mapper namespace="com.mjl.dao.SignDao">
+    <!--select表示查询,它的id名称必须与DAO层接口的方法名相同,否则无法绑定-->
+    <select id="selectByEmplName" parameterType="string" resultType="Sign">
+        select * from sign where EmplName = #{EmplName}
+    </select>
+
+    <select id="selectByEmplId" parameterType="int" resultType="Sign">
+        select * from sign where EmplId = #{EmplId}
+    </select>
+
+    <select id="selectByDate"  resultType="Sign" parameterType="map">
+        select * from sign where 1=1 and time LIKE concat('%',#{time},'%')
+
+    </select>
+
+    <select id="getAllSign" resultType="Sign">
+        SELECT * FROM sign
+    </select>
+
+    <select id="getAllSignById" resultType="Sign">
+        SELECT * FROM sign WHERE emplId=#{id}
+    </select>
+
+    <insert id="addSign" parameterType="Sign">
+        insert into sign(formId,emplName,emplId,time,login,loginState,signOut,signOutState,trueTime) values (#{formId},#{emplName},#{emplId},#{time},#{login},#{loginState},#{signOut},#{signOutState},#{trueTime})
+    </insert>
+
+    <select id="getSignLogsByPage" resultType="Sign" parameterType="map">
+        select * from sign where 1=1
+         <if test="time!=null">
+                 and time LIKE concat('%',#{time},'%')
+         </if>
+         <if test="id!=0">
+                 and emplId=#{id}
+         </if>
+         limit #{start},#{end}
+    </select>
+
+    <select id="getAllSignCount" parameterType="int" resultType="int">
+        select count(*) from sign where 1=1
+        <if test="time!=null">
+            and time LIKE concat('%',#{time},'%')
+        </if>
+        <if test="id!=0">
+            and emplId=#{id}
+        </if>
+    </select>
+
+    <insert id="addSignByLeave" parameterType="Sign" >
+        insert into sign(formId,emplName,emplId,time,login,loginState,signOut,signOutState,trueTime) values (#{formId},#{emplName},#{emplId},#{time},#{login},#{loginState},#{signOut},#{signOutState},#{trueTime})
+    </insert>
+
+    <update id="updateSignOutState"  parameterType="String" >
+        UPDATE sign SET signOut=#{signOut}  , signOutState = #{signOutState} , trueTime=#{trueTime} WHERE 1=1
+        <if test="time!=null">
+            and time=#{time}
+        </if>
+        <if test="formId!=0">
+            and formId=#{formId}
+        </if>
+    </update>
+</mapper>

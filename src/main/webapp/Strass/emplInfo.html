@@ -17,8 +17,8 @@
             margin-bottom: 3px;
             display: none;
             position: absolute;
-            background: #fbfbfb;
-            border: solid 1px #6e8bde;
+            background: #f2f2f2;
+            border: solid 3px #286a3a;
         }
 
         #bg {
@@ -47,13 +47,12 @@
         var totalPage = "4";//总页数
         var rowCount = "4";//总条数
         var params="";//参数
-        var date_="";
+        var emplName_="";
         var emplId_=0;
-        var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
         var EMOLID_FORMAT = /^[0-9]*$/;
         function queryForPages(){
-            var params={pageNum:currentPage,pageSize:pageSize,date:date_,emplId:emplId_};
-            $.post("/employee/logListByPage.do",params,
+            var params={pageNum:currentPage,pageSize:pageSize,emplName_:emplName_,emplId_:emplId_};
+            $.post("/Action/userList.do",params,
                 function(data){
 //                    var results = JSON.parse(data);
                     var results = data;
@@ -71,11 +70,11 @@
                         for(var i=0; i<list.length; i++){
 
                             s += '<tr><td>' +(i+1)
-                                + '</td><td>' + list[i].EmplName
-                                + '</td><td>' + list[i].EmplId
-                                + '</td><td>' + list[i].EmplEmail
-                                + '</td><td>' + list[i].EmplAdmin
-                                + '</td><INPUT TYPE="button" VALUE="按钮" ONCLICK="" id="an"><td>'
+                                + '</td><td>' + list[i].username
+                                + '</td><td>' + list[i].id
+                                + '</td><td>' + list[i].email
+                                + '</td><td>' + list[i].emplAdmin
+                                + '</td><td><input TYPE="button" VALUE="按钮" ONCLICK="" id="an">'
                                 + '</td></tr>';
 
                         }
@@ -131,10 +130,12 @@
         $(document).ready(
 
             function(){
+
                 $('#basic-modal .basic').click(function () {
                     $('#basic-modal-content').modal();
                     return false;
                 });
+
                 //员工号查询查询
                 $("#emplIdBotton").click(function() {
                     emplId_ = $(emplId).val();
@@ -258,14 +259,26 @@
                 </div>
                 <div id='pop-div' style="width: 250px;height:250px;" class="pop-box">
                     <br>
+                    <h3 style="text-align:center;font-size:20px">信息修改</h3>
+                    <h4 style="text-align:center;border-top:3px solid #286a3a"></h4>
                     <br>
-                    <br>
-                    <br>
-                    <h4 style="text-align:center;border-top:1px dashed #000">22</h4>
                     <div style="text-align:center">
-                        <p>33</p>
+                        <tr>
+                            <th style="font-size: 16px">密码修改：</th>
+                            <td><input type="text" style="width: 90px"/></td>
+
+                        </tr>
+                        <br>
+                        <br>
+                        <tr>
+                            <th style="font-size: 16px">邮箱修改：</th>
+                            <td><input type="text" style="width: 90px"/></td>
+                        </tr>
+                        <br>
+                        <br>
                         <div id='buttonPanel'  style="text-align:center">
-                            <input type="button" value="Close" id="btn1" class="btn btn-primary btn2" onclick="hideDiv('pop-div');" />
+                            <input style="margin:0 20px" type="button" value="Close" id="btn2" class="btn btn-primary btn2" onclick="hideDiv('pop-div') ;" />
+                            <input style="margin:0 20px" type="button" value="Close" id="btn1" class="btn btn-primary btn2" onclick="hideDiv('pop-div');" />
                         </div>
                     </div>
 

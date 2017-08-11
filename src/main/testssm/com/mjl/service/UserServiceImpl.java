@@ -86,6 +86,11 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    public boolean updateEmailById(Integer id, String email) {
+        return Mapper.updateEmailById(id,email);
+    }
+
+
     public Integer gerAllUserCount(String emplName, Integer emplId) {
 
         return Mapper.gerAllUserCount(emplName,emplId);

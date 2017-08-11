@@ -33,9 +33,9 @@
                 $("#sub").click(function(){
                     fistInput_=$(fistInput).val();
                     secondInput_=$(secondInput).val();
-                    if(fistInput_==null){
+                    if(fistInput_){
                         alert("(＝。＝)密码不能为空");
-                    }else if(secondInput_==null){
+                    }else if(secondInput_){
                         alert("(＝。＝)第二次密码不能为空");
                     }else if(secondInput_.length<6||fistInput_.length<6){
                         alert("(＝。＝)密码不能小于六位哦");
@@ -58,7 +58,7 @@
 <div class="topbar-wrap white">
     <!--<div class="topbar-inner clearfix">-->
         <div class="topbar-logo-wrap clearfix">
-            <h1 class="topbar-logo none"><a href="index.html" class="navbar-brand">管理员中心</a></h1>
+            <h1 class="topbar-logo none"><a href="administer.html class="navbar-brand">管理员中心</a></h1>
         </div>
     </div>
 </div>

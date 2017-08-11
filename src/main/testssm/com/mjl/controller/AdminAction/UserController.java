@@ -63,6 +63,7 @@ public class UserController {
         User user=(User)request.getSession().getAttribute("user");
         Map<String,Object> messageJeson=new HashMap<String, Object>();
         if(fistInput.toString().equals(secondInput.toString())!=false){
+
             user.setPassword(secondInput);
             userService.updateUserById(user);
             message=true;
@@ -76,10 +77,9 @@ public class UserController {
 
     }
 
-    @RequestMapping("/logout")
-    public String logout(HttpServletRequest request,HttpSession httpSession){
-        httpSession.invalidate();
-        return "UserView/login";
+    @RequestMapping("/modifyEmail")
+    public void logout(HttpServletRequest request,@RequestParam Integer emplId,@RequestParam String emplEmail){
+        userService.updateEmailById(emplId,emplEmail);
     }
 
 

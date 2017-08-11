@@ -18,6 +18,10 @@
         update employee set EmplName=#{EmplName},EmplPassword=#{EmplPassword} where EmplId=#{EmplId}
     </update>
 
+    <update id="updateEmailById" parameterType="Integer">
+        update employee set EmplEmail=#{EmplEmail}where EmplId=#{EmplId}
+    </update>
+
     <select id="getAllUser" resultType="User">
         SELECT * FROM employee
     </select>

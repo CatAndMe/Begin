@@ -48,8 +48,39 @@
         var rowCount = "4";//总条数
         var params="";//参数
         var emplName_="";
+        var email_="";
+        var fistInput_="";
+        var secondInput_="";
         var emplId_=0;
         var EMOLID_FORMAT = /^[0-9]*$/;
+        function changeInfo() {
+            var params={fistInput:fistInput_,secondInput:secondInput_};
+            $.post("/user/modifyPassword.do",params,
+                function(data){
+                    if (data.message==true){
+                        alert("(づ￣3￣)づ╭❤～成功");
+                        hideDiv('pop-div');
+                    }else {
+                        alert("(づ￣3￣)づ╭❤～失败");
+                    }
+
+                })
+            
+        }
+        function changeEmplEmail() {
+            var params={emplId:id,emplEmail:secondInput_};
+            $.post("/user/modifyEmail.do",params,
+                function(data){
+                    if (data.message==true){
+                        alert("(づ￣3￣)づ╭❤～成功");
+                        hideDiv('pop-div');
+                    }else {
+                        alert("(づ￣3￣)づ╭❤～失败");
+                    }
+
+                })
+
+        }
         function queryForPages(){
             var params={pageNum:currentPage,pageSize:pageSize,emplName_:emplName_,emplId_:emplId_};
             $.post("/Action/userList.do",params,
@@ -74,7 +105,7 @@
                                 + '</td><td>' + list[i].id
                                 + '</td><td>' + list[i].email
                                 + '</td><td>' + list[i].emplAdmin
-                                + '</td><td><input TYPE="button" VALUE="按钮" ONCLICK="" id="an">'
+                                + '</td><td><a href="#" onclick="popupDiv(\'pop-div\',\''+list[i].id+'\')">修改</a>'
                                 + '</td></tr>';
 
                         }
@@ -88,7 +119,7 @@
                 })
 
         }
-        function popupDiv(div_id) {
+        function popupDiv(div_id,id) {
             // 获取传入的DIV
             var $div_obj = $("#" + div_id);
             // 计算机屏幕高度
@@ -105,17 +136,49 @@
                 .height(windowHeight).click(function() {
                 //hideDiv(div_id);
             }).appendTo("body").fadeIn(200);
-
-            // 显示弹出的DIV
+            $div_obj.html(
+                "<br>\n" +
+                "                    <h3 style=\"text-align:center;font-size:20px\">信息修改</h3>\n" +
+                "                    <h4 style=\"text-align:center;border-top:3px solid #286a3a\"></h4>\n" +
+                "                    <br>\n" +
+                "                    <div style=\"text-align:center\">\n" +
+                "                        <tr>\n" +
+                "                            <th style=\"font-size: 16px\">输入密码：</th>\n" +
+                "                            <td><input id=\"changeInfo1\" type=\"text\" style=\"width: 90px\"/></td>\n" +
+                "\n" +
+                "                        </tr>\n" +
+                "                        <br>\n" +
+                "                        <br>\n" +
+                "                        <tr>\n" +
+                "                            <th style=\"font-size: 16px\">再次输入：</th>\n" +
+                "                            <td><input id=\"changeInfo2\" type=\"text\" style=\"width: 90px\"/></td>\n" +
+                "\n" +
+                "                        </tr>\n" +
+                "                        <br>\n" +
+                "                        <br>\n" +
+                "                        <tr>\n" +
+                "                            <th style=\"font-size: 16px\">邮箱修改：</th>\n" +
+                "                            <td><input value='"+id+"' id=\"emplI_update\" type=\"hidden\"><input id=\"changeInfo3\" type=\"text\" style=\"width: 90px\"/></td>\n" +
+                "                        </tr>\n" +
+                "                        <br>\n" +
+                "                        <br>\n" +
+                "                        <div id='buttonPanel'  style=\"text-align:center\">\n" +
+                "\n" +
+                "                            <input style=\"margin:0 20px\" type=\"button\" value=\"取消\" id=\"btn1\" class=\"btn btn-primary btn2\" onclick=\"hideDiv('pop-div') ;\" />\n" +
+                "                            <input style=\"margin:0 20px\" type=\"button\" value=\"确认\" id=\"btn2\" class=\"btn btn-primary btn2\" onclick=\"checkSuer();\" />\n" +
+                "                        </div>\n" +
+                "                        <br>"
+            )
             $div_obj.css({
                 "position" : "absloute",
                 "left" : windowWidth / 2 - popupWidth / 2.3,
-                "top" : windowHeight / 2.3 - popupHeight /2.3,
+                "top" : windowHeight / 2.4 - popupHeight /2.3,
                 "opacity" : "show"
             }).animate({
 
                 opacity : "show"
             }, "slow");
+
 
         }
         /*隐藏弹出DIV*/
@@ -125,7 +188,58 @@
 //                left : 0,
 //                top : 0,
                 opacity : "hide"
+
             }, "slow");
+
+        }
+        function checkSuer() {
+            fistInput_=$("#changeInfo1").val();
+            secondInput_=$("#changeInfo2").val();
+            email_=$("#changeInfo3").val();
+            if (fistInput_ && secondInput_ && !email_){
+                checkPassword();
+            }else if(fistInput_ && secondInput_ && email_){
+
+                if (checkEmail(email_)==true){
+                    checkPassword($("#changeInfo1").val(),$("#changeInfo2").val());
+                }else {
+                    alert("(＝。＝)邮箱格式有误");
+                }
+            }else if(!fistInput_ && !secondInput_ && email_){
+                if (checkEmail(email_)==true){
+                    changeInfo();
+                }else {
+                    alert("(＝。＝)邮箱格式有误");
+                }
+
+            }else {
+                hideDiv('pop-div');
+            }
+        }
+        function checkEmail(str){
+            var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+            if (re.test(str)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function checkPassword() {
+            fistInput_=$("#changeInfo1").val();
+            secondInput_=$("#changeInfo2").val();
+            if(fistInput_==null){
+                alert("(＝。＝)密码不能为空");
+            }else if(secondInput_==null){
+                alert("(＝。＝)第二次密码不能为空");
+            }else if(secondInput_.length<6||fistInput_.length<6){
+                alert("(＝。＝)密码不能小于六位哦");
+            }else if(fistInput_!=secondInput_){
+                alert("╮(╯_╰)╭两次密码输入不一致");
+            }else if(PASSWORD_FORMAT.test(fistInput_)==false||PASSWORD_FORMAT.test(secondInput_)==false){
+                alert("╮(╯_╰)╭密码组成只能是数字或字母");
+            }else {
+                changeInfo();
+            }
         }
         $(document).ready(
 
@@ -205,7 +319,7 @@
                 <li>
                     <a href="#"><i class="icon-font">&#xe018;</i>系统管理</a>
                     <ul class="sub-menu">
-                        <li><a href="emplInfo.html"><i class="icon-font">&#xe006;</i>员工信息查看</a></li>
+                        <li><a href="emplInfo.html"><i class="icon-font">&#xe006;</i>员工信息</a></li>
                         <li><a href="system.html"><i class="icon-font">&#xe037;</i>清理缓存</a></li>
                         <li><a href="system.html"><i class="icon-font">&#xe046;</i>数据备份</a></li>
                         <li><a href="system.html"><i class="icon-font">&#xe045;</i>数据还原</a></li>
@@ -218,7 +332,7 @@
     <div class="main-wrap">
 
         <div class="crumb-wrap">
-            <div class="crumb-list"><i class="icon-font"></i><a href="index.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">记录查询</span></div>
+            <div class="crumb-list"><i class="icon-font"></i><a href="administer.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">记录查询</span></div>
         </div>
         <div class="search-wrap">
             <div class="search-content">
@@ -255,32 +369,10 @@
                     <button class="btn btn-primary btn2" id="previous">上一页</button>
                     <button class="btn btn-primary btn2" id="next">下一页</button>
                     <button class="btn btn-primary btn2" id="last">尾页</button>
-                    <input type="button" value="21" onclick="popupDiv('pop-div')" style="cursor: pointer;">
                 </div>
                 <div id='pop-div' style="width: 250px;height:250px;" class="pop-box">
-                    <br>
-                    <h3 style="text-align:center;font-size:20px">信息修改</h3>
-                    <h4 style="text-align:center;border-top:3px solid #286a3a"></h4>
-                    <br>
-                    <div style="text-align:center">
-                        <tr>
-                            <th style="font-size: 16px">密码修改：</th>
-                            <td><input type="text" style="width: 90px"/></td>
 
-                        </tr>
-                        <br>
-                        <br>
-                        <tr>
-                            <th style="font-size: 16px">邮箱修改：</th>
-                            <td><input type="text" style="width: 90px"/></td>
-                        </tr>
-                        <br>
-                        <br>
-                        <div id='buttonPanel'  style="text-align:center">
-                            <input style="margin:0 20px" type="button" value="Close" id="btn2" class="btn btn-primary btn2" onclick="hideDiv('pop-div') ;" />
-                            <input style="margin:0 20px" type="button" value="Close" id="btn1" class="btn btn-primary btn2" onclick="hideDiv('pop-div');" />
-                        </div>
-                    </div>
+                </div>
 
                 </div>
             </div>

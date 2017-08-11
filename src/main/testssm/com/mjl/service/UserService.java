@@ -17,5 +17,6 @@ public interface UserService {
     public boolean addUser(User useradd);
     public boolean deleteById(Integer id);
     public boolean updateUserById(User userUpdate);
+    public boolean updateEmailById(Integer id,String email);
     public Integer gerAllUserCount(String emplName,Integer emplId);
 }

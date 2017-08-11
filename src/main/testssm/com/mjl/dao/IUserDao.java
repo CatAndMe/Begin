@@ -22,4 +22,5 @@ public interface IUserDao {
     boolean addUser(User user);
     boolean deleteById(Integer EmplId);
     boolean updateUserById(User user);
+    boolean updateEmailById(@Param("EmplId")Integer EmplId,@Param("EmplEmail")String EmplEmail);
 }

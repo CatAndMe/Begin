@@ -57,10 +57,16 @@ public class UserController {
 
     @RequestMapping("/modifyPassword")
     @ResponseBody
-       public Object hallo(HttpServletRequest request,@RequestParam String fistInput,@RequestParam String secondInput){
+       public Object hallo(HttpServletRequest request,@RequestParam String fistInput,@RequestParam String secondInput,@RequestParam Integer emplId){
         boolean message;
         HttpSession it=request.getSession();
-        User user=(User)request.getSession().getAttribute("user");
+        User user;
+        if (emplId==0) {
+            user=(User)request.getSession().getAttribute("user");
+        }else {
+            user=userService.selectById(emplId);
+        }
+
         Map<String,Object> messageJeson=new HashMap<String, Object>();
         if(fistInput.toString().equals(secondInput.toString())!=false){
 
@@ -78,8 +84,21 @@ public class UserController {
     }
 
     @RequestMapping("/modifyEmail")
-    public void logout(HttpServletRequest request,@RequestParam Integer emplId,@RequestParam String emplEmail){
-        userService.updateEmailById(emplId,emplEmail);
+    @ResponseBody
+    public Object change(HttpServletRequest request,@RequestParam Integer emplId,@RequestParam String emplEmail){
+        Map<String,Object> messageJeson=new HashMap<String, Object>();
+        boolean message;
+        if(userService.updateEmailById(emplId,emplEmail)==true){
+            message=true;
+            messageJeson.put("message",message);
+            return JSONObject.fromObject(messageJeson);
+        }else {
+            message=false;
+            messageJeson.put("message",message);
+            return JSONObject.fromObject(messageJeson);
+        }
+
+
     }
 
 

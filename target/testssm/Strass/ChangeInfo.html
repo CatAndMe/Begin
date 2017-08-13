@@ -11,9 +11,10 @@
     <script type="text/javascript">
         var fistInput_="";
         var secondInput_="";
+        var emplId_=0;
         var PASSWORD_FORMAT =/[0-9A-Za-z]/;
         function queryForPages(){
-            var params={fistInput:fistInput_,secondInput:secondInput_};
+            var params={fistInput:fistInput_,secondInput:secondInput_,emplId:emplId_};
             $.post("/user/modifyPassword.do",params,
                 function(data){
                     if (data.message==true){
@@ -33,9 +34,9 @@
                 $("#sub").click(function(){
                     fistInput_=$(fistInput).val();
                     secondInput_=$(secondInput).val();
-                    if(fistInput_){
+                    if(!fistInput_){
                         alert("(＝。＝)密码不能为空");
-                    }else if(secondInput_){
+                    }else if(!secondInput_){
                         alert("(＝。＝)第二次密码不能为空");
                     }else if(secondInput_.length<6||fistInput_.length<6){
                         alert("(＝。＝)密码不能小于六位哦");

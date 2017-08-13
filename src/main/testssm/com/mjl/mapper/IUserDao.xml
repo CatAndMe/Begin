@@ -18,8 +18,8 @@
         update employee set EmplName=#{EmplName},EmplPassword=#{EmplPassword} where EmplId=#{EmplId}
     </update>
 
-    <update id="updateEmailById" parameterType="Integer">
-        update employee set EmplEmail=#{EmplEmail}where EmplId=#{EmplId}
+    <update id="updateEmailById" parameterType="map">
+        update employee set EmplEmail=#{EmplEmail_} where EmplId=#{EmplId_}
     </update>
 
     <select id="getAllUser" resultType="User">

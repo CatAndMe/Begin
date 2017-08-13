@@ -86,8 +86,14 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    public boolean updateEmailById(Integer id, String email) {
-        return Mapper.updateEmailById(id,email);
+    public boolean updateEmailById(Integer id_, String email_) {
+        Integer id=(Integer)id_;
+        String email=(String) email_;
+        if (Mapper.updateEmailById(id,email) == true) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
 

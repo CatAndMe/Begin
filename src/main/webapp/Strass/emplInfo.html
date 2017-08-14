@@ -22,8 +22,8 @@
         }
 
         #bg {
-            width: 100%;
-            height: 100%;
+            width: 200%;
+            height: 200%;
             position: absolute;
             top: 0;
             left: 0;
@@ -40,264 +40,10 @@
     </style>
     <script type="text/javascript" src="../StarIndex/js/jquery.js"></script>
     <script type="text/javascript" src="../StarIndex/js/libs/modernizr.min.js"></script>
-    <script type="text/javascript">
-
-        var pageSize = "8";//每页行数
-        var currentPage = "1";//当前页
-        var totalPage = "4";//总页数
-        var rowCount = "4";//总条数
-        var params="";//参数
-        var emplName_="";
-        var email_="";
-        var fistInput_="";
-        var secondInput_="";
-        var emplId_=0;
-        function changeInfo(emplId_Info) {
-            var params={fistInput:fistInput_,secondInput:secondInput_,emplId:emplId_Info};
-            $.post("/user/modifyPassword.do",params,
-                function(data){
-                    if (data.message==true){
-                        alert("(づ￣3￣)づ╭❤～成功");
-                        hideDiv('pop-div');
-                    }else {
-                        alert("(づ￣3￣)づ╭❤～失败");
-                    }
-
-                })
-            
-        }
-        function changeEmplEmail(emplId_) {
-            var params={emplId:emplId_,emplEmail:email_};
-            $.post("/user/modifyEmail.do",params,
-                function(data1){
-                    if (data1.message==true){
-                        alert("(づ￣3￣)づ╭❤～成功");
-                        hideDiv('pop-div');
-                    }else {
-                        alert("(づ￣3￣)づ╭❤～失败");
-                    }
-
-                })
-
-        }
-        function queryForPages(){
-            var params={pageNum:currentPage,pageSize:pageSize,emplName_:emplName_,emplId_:emplId_};
-            $.post("/Action/userList.do",params,
-                function(data){
-//                    var results = JSON.parse(data);
-                    var results = data;
-                    var list = results.Data;
-                    totalPage = results.totalPageCount;
-                    rowCount = results.totalItemCount;
-                    pageNo=results.pageNum;
-                    var message=results.Message;
-                    var s = '';
-                    if (message!=null){
-                        alert(message);
-                    }
-
-                    if(list.length != 0){
-                        for(var i=0; i<list.length; i++){
-
-                            s += '<tr><td>' +(i+1)
-                                + '</td><td>' + list[i].username
-                                + '</td><td>' + list[i].id
-                                + '</td><td>' + list[i].email
-                                + '</td><td>' + list[i].emplAdmin
-                                + '</td><td><a href="#" onclick="popupDiv(\'pop-div\',\''+list[i].id+'\')">修改</a>'
-                                + '</td></tr>';
-
-                        }
-
-                        $('#tb').html(s);
-                        $(emplId).val(null);
-                    } else{
-                        $('#tb').html("");
-                        $(emplId).val(null);
-                    }
-                })
-
-        }
-        function popupDiv(div_id,id) {
-            // 获取传入的DIV
-            var $div_obj = $("#" + div_id);
-            // 计算机屏幕高度
-            var windowWidth = $(document.body).width();
-            // 计算机屏幕长度
-            var windowHeight = $(document.body).height();
-            // 取得传入DIV的高度
-            var popupHeight = $div_obj.height();
-            // 取得传入DIV的长度
-            var popupWidth = $div_obj.width();
-
-            // // 添加并显示遮罩层
-            $("<div id='bg'></div>").width(windowWidth)
-                .height(windowHeight).click(function() {
-                //hideDiv(div_id);
-            }).appendTo("body").fadeIn(200);
-            $div_obj.html(
-                "<br>\n" +
-                "                    <h3 style=\"text-align:center;font-size:20px\">信息修改</h3>\n" +
-                "                    <h4 style=\"text-align:center;border-top:3px solid #286a3a\"></h4>\n" +
-                "                    <br>\n" +
-                "                    <div style=\"text-align:center\">\n" +
-                "                        <tr>\n" +
-                "                            <th style=\"font-size: 16px\">输入密码：</th>\n" +
-                "                            <td><input id=\"changeInfo1\" type=\"text\" style=\"width: 90px\"/></td>\n" +
-                "\n" +
-                "                        </tr>\n" +
-                "                        <br>\n" +
-                "                        <br>\n" +
-                "                        <tr>\n" +
-                "                            <th style=\"font-size: 16px\">再次输入：</th>\n" +
-                "                            <td><input id=\"changeInfo2\" type=\"text\" style=\"width: 90px\"/></td>\n" +
-                "\n" +
-                "                        </tr>\n" +
-                "                        <br>\n" +
-                "                        <br>\n" +
-                "                        <tr>\n" +
-                "                            <th style=\"font-size: 16px\">邮箱修改：</th>\n" +
-                "                            <td><input value='"+id+"' id=\"emplId_update\" type=\"hidden\"><input id=\"changeInfo3\" type=\"text\" style=\"width: 90px\"/></td>\n" +
-                "                        </tr>\n" +
-                "                        <br>\n" +
-                "                        <br>\n" +
-                "                        <div id='buttonPanel'  style=\"text-align:center\">\n" +
-                "\n" +
-                "                            <input style=\"margin:0 20px\" type=\"button\" value=\"取消\" id=\"btn1\" class=\"btn btn-primary btn2\" onclick=\"hideDiv('pop-div') ;\" />\n" +
-                "                            <input style=\"margin:0 20px\" type=\"button\" value=\"确认\" id=\"btn2\" class=\"btn btn-primary btn2\" onclick=\"checkSuer();\" />\n" +
-                "                        </div>\n" +
-                "                        <br>"
-            )
-            $div_obj.css({
-                "position" : "absloute",
-                "left" : windowWidth / 2 - popupWidth / 2.3,
-                "top" : windowHeight / 2.4 - popupHeight /2.3,
-
-                "opacity" : "show"
-            }).animate({
-
-                opacity : "show"
-            }, "slow");
-
-
-        }
-        /*隐藏弹出DIV*/
-        function hideDiv(div_id) {
-            $("#bg").remove();
-            $("#" + div_id).animate({
-//                left : 0,
-//                top : 0,
-                opacity : "hide"
-
-            }, "slow");
-
-        }
-        function checkSuer() {
-            fistInput_=$("#changeInfo1").val();
-            secondInput_=$("#changeInfo2").val();
-            email_=$("#changeInfo3").val();
-            var emplId_Info=$("#emplId_update").val();
-            if (fistInput_ && secondInput_ && !email_){
-                checkPassword(emplId_Info);
-            }else if(fistInput_ && secondInput_ && email_){
-
-                if (checkEmail(email_)==true){
-                    changeEmplEmail(emplId_Info);
-                    checkPassword(emplId_Info);
-                }else {
-                    alert("(＝。＝)邮箱格式有误");
-                }
-            }else if(!fistInput_ && !secondInput_ && email_){
-                if (checkEmail(email_)==true){
-                    changeEmplEmail(emplId_Info);
-
-                }else {
-                    alert("(＝。＝)邮箱格式有误");
-                }
-
-            }else {
-                hideDiv('pop-div');
-            }
-        }
-        function checkEmail(str){
-            var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
-            if (re.test(str)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        function checkPassword(emplId_Info) {
-            fistInput_=$("#changeInfo1").val();
-            secondInput_=$("#changeInfo2").val();
-            var PASSWORD_FORMAT =/[0-9A-Za-z]/;
-            if(!fistInput_){
-                alert("(＝。＝)密码不能为空");
-            }else if(!secondInput_){
-                alert("(＝。＝)第二次密码不能为空");
-            }else if(secondInput_.length<6||fistInput_.length<6){
-                alert("(＝。＝)密码不能小于六位哦");
-            }else if(fistInput_!=secondInput_){
-                alert("╮(╯_╰)╭两次密码输入不一致");
-            }else if(PASSWORD_FORMAT.test(fistInput_)==false||PASSWORD_FORMAT.test(secondInput_)==false){
-                alert("╮(╯_╰)╭密码组成只能是数字或字母");
-            }else {
-                changeInfo(emplId_Info);
-            }
-        }
-        $(document).ready(
-
-            function(){
-
-                $('#basic-modal .basic').click(function () {
-                    $('#basic-modal-content').modal();
-                    return false;
-                });
-
-                //员工号查询查询
-                $("#emplIdBotton").click(function() {
-                    emplId_ = $(emplId).val();
-                    if(EMOLID_FORMAT.test(emplId_)==false && emplId_!=null){
-                        alert("(＞﹏＜)您输入的员工号格式有误,请输入数字");
-                    }else {
-                        queryForPages();
-                    }
-
-                });
-                //首页
-                $("#firstPage").click(function(){
-                    currentPage="1";
-                    queryForPages();
-                });
-                //上一页
-                $("#previous").click(function(){
-                    if(currentPage>1)
-                    {
-                        currentPage-- ;
-                    }
-                    queryForPages();
-                });
-                //下一页
-                $("#next").click(function(){
-                    if(currentPage<totalPage)
-                    {
-                        currentPage++ ;
-                    }
-                    queryForPages();
-                });
-                //尾页
-                $("#last").click(function(){
-                    currentPage = totalPage;
-                    queryForPages();
-                });
-                queryForPages();
-            }
-        );
-
-    </script>
+    <script type="text/javascript" src="jss/emplInfoJs.js"></script>
 
 </head>
-<body>
+<body style="height: 130%;width: 100%">
 <div class="topbar-wrap white">
     <div class="topbar-inner clearfix">
         <div class="topbar-logo-wrap clearfix">
@@ -305,7 +51,7 @@
         </div>
     </div>
 </div>
-<div class="container clearfix">
+<div class="container cl3earfix">
     <div class="sidebar-wrap">
         <div class="sidebar-title">
             <h1>菜单</h1>
@@ -351,7 +97,14 @@
             </div>
         </div>
         <div class="result-wrap">
+            <br>
+            <tr>
 
+                <td><input onclick="add_user()" id="addBotton"  class="btn btn-primary btn2" name="emplIdBotton" value="新增"  type="button"/></td>
+                <td><input id="deleteBotton"  class="btn btn-primary btn2" name="emplIdBotton" value="删除"  type="button"/></td>
+            </tr>
+            <br>
+            <br>
             <div class="result-content">
                 <table  class="result-tab" width="100%">
                     <tr>
@@ -362,6 +115,7 @@
                         <td>权限</td>
                         <td>操作</td>
                     </tr>
+
 
                     <tbody class="result-tab" width="100%" id="tb" style="align-content: center"></tbody>
 
@@ -374,7 +128,7 @@
                     <button class="btn btn-primary btn2" id="next">下一页</button>
                     <button class="btn btn-primary btn2" id="last">尾页</button>
                 </div>
-                <div id='pop-div' style="width: 250px;height:250px;" class="pop-box">
+                <div id='pop-div' class="pop-box">
 
                 </div>
 

@@ -37,7 +37,8 @@ public class UserAction {
 
     @RequestMapping("/userList")
     @ResponseBody
-    public Object list(Model model, HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String emplName_, @RequestParam Integer emplId_){
+    public Object list(Model model, HttpServletRequest request, @RequestParam Integer pageNum,
+                       @RequestParam Integer pageSize, @RequestParam String emplName_, @RequestParam Integer emplId_){
         User user=(User)request.getSession().getAttribute("user");
         Integer total=0;
         Map<String,Object> pageObject=new HashMap<String, Object>();
@@ -77,43 +78,36 @@ public class UserAction {
     }
 
     @RequestMapping("/add")
-    public String add(User user,HttpServletRequest request){
-        if (userService.selectById(user.getId())==null && user.getPassword().length()!=0 && user.getUsername().length()!=0 && user.getUsername().lastIndexOf(" ")==-1 && user.getPassword().lastIndexOf(" ")==-1){
-            if(userService.addUser(user)==true){
-                return "view/Congratulation";
-            }else {
-                request.setAttribute("message","未知错误");
-                return "view/error";
-            }
-
-        }else{
-            if (userService.selectById(user.getId())!=null)
-            {
-                request.setAttribute("message","已存在用户ID");
-                return "view/error";
-            }else if(user.getPassword().length()==0|| user.getUsername().length()==0){
-                request.setAttribute("message","请输入用户名或密码");
-                return "view/error";
-            }else if (user.getPassword().lastIndexOf(" ")!=-1 || user.getUsername().lastIndexOf(" ")!=-1){
-                request.setAttribute("message","用户名和密码不能有空格");
-                return "view/error";
-            }
-            else {
-                request.setAttribute("message","未知错误");
-                return "view/error";
-            }
-
+    @ResponseBody
+    public Object add(HttpServletRequest request,@RequestParam String userName,@RequestParam String userPassword,
+                      @RequestParam String userEmail,@RequestParam Integer userId,@RequestParam Integer userAdmin
+                      ){
+        User user=new User();
+        Map<String,Object> messageJson=new HashMap<String,Object>();
+        user.setUsername(userName);
+        user.setPassword(userPassword);
+        user.setId(userId);
+        user.setEmail(userEmail);
+        user.setEmplAdmin(userAdmin);
+        if (userService.selectById(userId)==null){
+            userService.addUser(user);
+            return JSONObject.fromObject(messageJson.put("message",true));
+        }else {
+            return JSONObject.fromObject(messageJson.put("message",false));
         }
+
+
     }
 
     @RequestMapping("/delete")
-    public String delete(Integer id,HttpServletRequest request){
-        if (userService.deleteById(id)==true && id!=null){
-            request.setAttribute("message","删除成功");
-            return "view/Congratulation";
+    @ResponseBody
+    public Object delete(@RequestParam Integer userId,HttpServletRequest request){
+        Map<String,Object> messageJson=new HashMap<String,Object>();
+        if (userService.deleteById(userId)==true && userId!=null){
+            return JSONObject.fromObject(messageJson.put("message","true"));
         }
         else {
-            return "view/error";
+            return JSONObject.fromObject(messageJson.put("message","false"));
         }
     }
 

@@ -10,7 +10,7 @@
         select * from employee where EmplName = #{EmplName}
     </select>
 
-    <select id="selectById" parameterType="Integer" resultType="User">
+    <select id="selectById" parameterType="map" resultType="User">
         select * from employee where EmplId = #{EmplId}
     </select>
 
@@ -31,7 +31,7 @@
     </delete>
 
     <insert id="addUser" parameterType="User">
-        insert into employee(EmplId,EmplName,EmplPassword) values (#{EmplId},#{EmplName},#{EmplPassword})
+        insert into employee(EmplId,EmplName,EmplPassword,EmplEmail,EmplAdmin) values (#{EmplId},#{EmplName},#{EmplPassword},#{email},#{EmplAdmin})
     </insert>
 
     <select id="gerAllUserCount" parameterType="int" resultType="int">

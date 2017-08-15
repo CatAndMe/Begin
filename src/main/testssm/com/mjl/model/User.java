@@ -7,15 +7,15 @@ public class User {
     private Integer EmplId;
     private String EmplName;
     private String EmplPassword;
-    private String email;
+    private String EmplEmail;
     private Integer EmplAdmin;
 
     public String getEmail() {
-        return email;
+        return EmplEmail;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.EmplEmail = EmplEmail;
     }
 
     public String getPassword() {

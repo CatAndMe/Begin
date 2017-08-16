@@ -33,19 +33,25 @@
 
     <select id="getSignLogsByPage" resultType="Sign" parameterType="map">
         select * from sign where 1=1
-         <if test="time!=null">
-                 and time LIKE concat('%',#{time},'%')
-         </if>
-         <if test="id!=0">
-                 and emplId=#{id}
-         </if>
+        <if test="startTime!=null">
+            and time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null">
+            AND time &lt;=#{endTime}
+        </if>
+        <if test="id!=0">
+            and emplId=#{id}
+        </if>
          limit #{start},#{end}
     </select>
 
-    <select id="getAllSignCount" parameterType="int" resultType="int">
+    <select id="getAllSignCount" parameterType="map" resultType="int">
         select count(*) from sign where 1=1
-        <if test="time!=null">
-            and time LIKE concat('%',#{time},'%')
+        <if test="startTime!=null">
+            and time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null">
+            AND time &lt;=#{endTime}
         </if>
         <if test="id!=0">
             and emplId=#{id}
@@ -65,4 +71,17 @@
             and formId=#{formId}
         </if>
     </update>
+
+    <select id="getSignByTimeAndId" parameterType="map" resultType="sign">
+        SELECT * FROM sign WHERE 1=1
+        <if test="startTime!=null">
+            and time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null">
+            AND time &lt;=#{endTime}
+        </if>
+        <if test="id!=0">
+            and emplId=#{id}
+        </if>
+    </select>
 </mapper>

@@ -50,7 +50,7 @@ public class Leave {
 
         //判断是否重复签到
         if (state.equals("迟到")){
-            if (signService.getAllSignCount(leaveTime,userId)==0){
+            if (signService.getAllSignCount(leaveTime,null,userId)==0){
                 Sign leaveSign=new Sign();
                 leaveSign.setFormId(formId);
                 leaveSign.setEmplName(username);
@@ -66,7 +66,7 @@ public class Leave {
             }
 
         }else{
-            if (signService.getAllSignCount(leaveTime,userId)==1){
+            if (signService.getAllSignCount(leaveTime,null,userId)==1){
 //                signService.updateSignOutState(reason,leaveTime);
             }else {
                 String message="这天没有签到(ToT)/~~~";

@@ -34,20 +34,23 @@ public class SignServiceImpl implements SignService {
         return signMapper.getAllSign();
     }
 
-    public List<Sign> getSignLogsByPage(Integer page, Integer pageSize,String time,Integer id) {
-//        time.replaceAll("-","");
-        time=time.toString();
-        page=(page-1)*pageSize;
-        return signMapper.getSignLogsByPage(page,pageSize,time,id);
+    public List<Sign> getSignByTimeAndId(String startTime, String endTime, Integer Id) {
+        return signMapper.getSignByTimeAndId(Id,startTime,endTime);
     }
 
-    public int getAllSignCount(String time,int id) {
-            return signMapper.getAllSignCount(time,id);
+    public List<Sign> getSignLogsByPage(Integer page, Integer pageSize,String startTime,String endTime,Integer Id) {
+//        time.replaceAll("-","");
+        page=(page-1)*pageSize;
+        return signMapper.getSignLogsByPage(page,pageSize,Id,startTime,endTime);
+    }
+
+    public int getAllSignCount(String startTime,String endTime,Integer Id) {
+            return signMapper.getAllSignCount(Id,startTime,endTime);
 
     }
 
     public int getAllSignCount() {
-        return signMapper.getAllSignCount(null,0);
+        return signMapper.getAllSignCount(0,null,null);
     }
 
     public boolean addSign(Sign sign) {
@@ -63,8 +66,6 @@ public class SignServiceImpl implements SignService {
         time=time.toString();
         return signMapper.selectByDate(time);
     }
-
-
 
     public List<Sign> getAllSignById(Integer id) {
         return signMapper.getAllSignById(id);
@@ -82,7 +83,7 @@ public class SignServiceImpl implements SignService {
                 return "确认迟到";
             }else{
                 Sign sign=new Sign();
-                sign.setFormId(signMapper.getAllSignCount(null,0)+1);
+                sign.setFormId(signMapper.getAllSignCount(0,null,null)+1);
                 sign.setEmplName(user.getUsername());
                 sign.setEmplId(emplId);
                 sign.setLoginState("签到");
@@ -120,7 +121,7 @@ public class SignServiceImpl implements SignService {
         Integer Id=emplId;
         User user=Mapper.selectById(Id);
         Sign sign=new Sign();
-        sign.setFormId(signMapper.getAllSignCount(null,0)+1);
+        sign.setFormId(signMapper.getAllSignCount(0,null,null)+1);
         sign.setEmplName(user.getUsername());
         sign.setEmplId(emplId);
         sign.setLoginState(state);
@@ -134,6 +135,7 @@ public class SignServiceImpl implements SignService {
         }
 
     }
+
     public boolean updateSignOutState(Integer emplId,String state,String leaveTime,String trueTime) {
         List<Sign> signLog=getAllSignById(emplId);
         Sign lastSignLog=signLog.get(signLog.size()-1);

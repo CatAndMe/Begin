@@ -1,5 +1,6 @@
 package com.mjl.controller.EmplAction;
 
+import com.mjl.controller.POIExcel.Push;
 import com.mjl.model.Sign;
 import com.mjl.model.User;
 import com.mjl.service.SignService;
@@ -52,7 +53,9 @@ public class ViewAction {
 
     @RequestMapping("/logListByPage")
     @ResponseBody
-    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String date,@RequestParam Integer emplId) throws ParseException {
+    public Object logListByPage(Model model,HttpServletRequest request, @RequestParam Integer pageNum,
+                                @RequestParam Integer pageSize,@RequestParam String startTime,
+                                @RequestParam String endTime,@RequestParam Integer emplId) throws ParseException {
         User user=(User)request.getSession().getAttribute("user");
         Integer total=0;
         Map<String,Object> pageObject=new HashMap<String, Object>();
@@ -68,21 +71,18 @@ public class ViewAction {
             pageSize=20;
         }
         //是否做了员工号查询
-        if (emplId==0){
-            //否，显示管理员和非管理员的内容
-            if (user.getEmplAdmin()>0){
-                total=signService.getAllSignCount(date,emplId);
-            }else {
-                total=signService.getAllSignCount(date,user.getId());
-            }
-        }else {
-            //是，如果是管理员则查询
-            if (user.getEmplAdmin()>0){
-                total=signService.getAllSignCount(date,emplId);
-            }else {
-                total=signService.getAllSignCount(date,user.getId());
-            }
+        if("".equals(startTime)){
+            startTime=null;
         }
+        if ("".equals(endTime)){
+            endTime=null;
+        }
+        if (user.getEmplAdmin()>0){
+            total=signService.getAllSignCount(startTime,endTime,emplId);
+        }else {
+            total=signService.getAllSignCount(startTime,endTime,user.getId());
+        }
+
         int totalPages=(int)Math.ceil(Float.valueOf(total)/pageSize);//向上取整，格式化total
 
 
@@ -101,26 +101,27 @@ public class ViewAction {
         if (emplId==0){
             //否，显示管理员和非管理员的内容
             if (user.getEmplAdmin()>0){
-                signList = signService.getSignLogsByPage(pageNum, pageSize,date,emplId);
+                signList = signService.getSignLogsByPage(pageNum, pageSize,startTime,endTime,emplId);
             }else {
-                signList = signService.getSignLogsByPage(pageNum, pageSize,date,user.getId());
+                signList = signService.getSignLogsByPage(pageNum, pageSize,startTime,endTime,user.getId());
             }
         }else {
             //是，如果是管理员则查询
             if (user.getEmplAdmin()>0){
-                signList = signService.getSignLogsByPage(pageNum, pageSize,date,emplId);
+                signList = signService.getSignLogsByPage(pageNum, pageSize,startTime,endTime,emplId);
             }else {
-                signList = signService.getSignLogsByPage(pageNum, pageSize,date,user.getId());
+                signList = signService.getSignLogsByPage(pageNum, pageSize,startTime,endTime,user.getId());
                 if ((Integer)emplId!=(Integer)user.getId()==true){
                     pageObject.put("Message","没有查询权限(*＾-＾*)");
                 }
             }
         }
-            pageObject.put("Data", signList);
-            pageObject.put("itemCount", signList == null ? 0 : signList.size());
-            request.setAttribute("signList", signList);
-            boolean message=signService.updateSignOutState(1,"忘签","08:00:00","2017:05:29");
-            System.out.println(message);
+
+        pageObject.put("Data", signList);
+        pageObject.put("itemCount", signList == null ? 0 : signList.size());
+        request.setAttribute("signList", signList);
+//      boolean message=signService.updateSignOutState(1,"忘签","08:00:00","2017:05:29");
+//      System.out.println(message);
         return JSONObject.fromObject(pageObject);
     }
 

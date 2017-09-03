@@ -54,9 +54,7 @@ public class UserServiceImpl implements UserService{
     public boolean addUser(User useradd) {
         //对输入账号进行查询,取出数据库中保存对信息
 
-        User user = Mapper.selectById(useradd.getId());
-        if (user == null && useradd.getId()!=null) {
-                Mapper.addUser(useradd);
+        if (Mapper.addUser(useradd)>0) {
                 return true;
         }else{
             return false;

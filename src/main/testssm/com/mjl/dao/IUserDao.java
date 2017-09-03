@@ -19,8 +19,8 @@ public interface IUserDao {
     List<User> getAllUser();
     List<User> getUserByPage(@Param("start") Integer start, @Param("end")Integer end,@Param("emplName")String emplName,@Param("emplId")Integer emplId);
     Integer gerAllUserCount(@Param("EmplName")String EmplName,@Param("EmplId")Integer EmplId);
-    boolean addUser(User user);
-    boolean deleteById(Integer EmplId);
+    Integer addUser(User user);
+    boolean deleteById(@Param("EmplId") Integer EmplId);
     boolean updateUserById(User user);
     boolean updateEmailById(@Param("EmplId_")Integer EmplId,@Param("EmplEmail_")String EmplEmail);
 }

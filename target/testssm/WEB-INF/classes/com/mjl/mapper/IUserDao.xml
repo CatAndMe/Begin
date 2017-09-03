@@ -26,12 +26,12 @@
         SELECT * FROM employee
     </select>
 
-    <delete id="deleteById" parameterType="Integer">
+    <delete id="deleteById" parameterType="map">
         delete from employee where EmplId = #{EmplId}
     </delete>
 
     <insert id="addUser" parameterType="User">
-        insert into employee(EmplId,EmplName,EmplPassword,EmplEmail,EmplAdmin) values (#{EmplId},#{EmplName},#{EmplPassword},#{email},#{EmplAdmin})
+        insert into employee(EmplId,EmplName,EmplPassword,EmplEmail,EmplAdmin) values (#{EmplId},#{EmplName},#{EmplPassword},#{EmplEmail},#{EmplAdmin})
     </insert>
 
     <select id="gerAllUserCount" parameterType="int" resultType="int">
@@ -54,5 +54,7 @@
         </if>
         limit #{start},#{end}
     </select>
+
+
 
 </mapper>

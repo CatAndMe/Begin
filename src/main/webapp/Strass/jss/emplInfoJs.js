@@ -41,9 +41,11 @@ function addNewUser(userName_,userPassword_,userEmail_,userId_,userAdmin_) {
     var params={userName:userName_,userPassword:userPassword_,userEmail:userEmail_,userId:userId_,userAdmin:userAdmin_};
     $.post("/Action/add.do",params,
         function (data) {
-            if (data.message=="true"){
+            if (data.message==true){
                 alert("(づ￣3￣)づ╭❤～成功");
                 hideDiv('pop-div');
+                window.location.reload();
+
             }else {
                 alert("用户已存在");
             }
@@ -53,9 +55,10 @@ function addNewUser(userName_,userPassword_,userEmail_,userId_,userAdmin_) {
 }
 function deleteUser(fistId,secondId) {
     var params;
+    fistId=$("#fistId").val();
     if (checkId($("#fistId").val())==true){
         if ($("#fistId").val()==$("#secondId").val()){
-            params={userId:$("#fistId").val()};
+            params={userId:fistId};
         }else {
             alert("两次输入不相等");
         }
@@ -65,9 +68,10 @@ function deleteUser(fistId,secondId) {
 
     $.post("/Action/delete.do",params,
         function (data) {
-            if (data.message=="true"){
+            if (data.message==true){
                 alert("(づ￣3￣)づ╭❤～成功");
                 hideDiv('pop-div');
+                window.location.reload();
             }else {
                 alert("失败");
             }
@@ -396,8 +400,8 @@ $(document).ready(
 
         //员工号查询查询
         $("#emplIdBotton").click(function() {
-            emplId_ = $(emplId).val();
-            if(EMOLID_FORMAT.test(emplId_)==false && emplId_!=null){
+            emplId_ = $("#emplId").val();
+            if(checkId($("#fistId").val())==false && emplId_==null){
                 alert("(＞﹏＜)您输入的员工号格式有误,请输入数字");
             }else {
                 queryForPages();

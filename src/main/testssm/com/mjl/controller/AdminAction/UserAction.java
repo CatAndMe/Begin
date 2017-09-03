@@ -83,17 +83,21 @@ public class UserAction {
                       @RequestParam String userEmail,@RequestParam Integer userId,@RequestParam Integer userAdmin
                       ){
         User user=new User();
-        Map<String,Object> messageJson=new HashMap<String,Object>();
+        boolean message;
+        Map<String,Object> messageJeson=new HashMap<String,Object>();
         user.setUsername(userName);
         user.setPassword(userPassword);
         user.setId(userId);
         user.setEmail(userEmail);
         user.setEmplAdmin(userAdmin);
-        if (userService.selectById(userId)==null){
-            userService.addUser(user);
-            return JSONObject.fromObject(messageJson.put("message",true));
+        if (userService.addUser(user)==true){
+            message=true;
+            messageJeson.put("message",message);
+            return messageJeson;
         }else {
-            return JSONObject.fromObject(messageJson.put("message",false));
+            message=false;
+            messageJeson.put("message",message);
+            return messageJeson;
         }
 
 
@@ -102,12 +106,17 @@ public class UserAction {
     @RequestMapping("/delete")
     @ResponseBody
     public Object delete(@RequestParam Integer userId,HttpServletRequest request){
-        Map<String,Object> messageJson=new HashMap<String,Object>();
+        Map<String,Object> messageJeson=new HashMap<String,Object>();
+        boolean message;
         if (userService.deleteById(userId)==true && userId!=null){
-            return JSONObject.fromObject(messageJson.put("message","true"));
+            message=true;
+            messageJeson.put("message",message);
+            return messageJeson;
         }
         else {
-            return JSONObject.fromObject(messageJson.put("message","false"));
+            message=false;
+            messageJeson.put("message",message);
+            return messageJeson;
         }
     }
 

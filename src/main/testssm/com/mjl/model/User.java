@@ -14,7 +14,7 @@ public class User {
         return EmplEmail;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String EmplEmail) {
         this.EmplEmail = EmplEmail;
     }
 

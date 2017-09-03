@@ -15,12 +15,13 @@
         var totalPage = "4";//总页数
         var rowCount = "4";//总条数
         var params="";//参数
-        var date_="";
+        var beginDate="";
+        var endDate="";
         var emplId_=0;
         var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
         var EMOLID_FORMAT = /^[0-9]*$/;
         function queryForPages(){
-            var params={pageNum:currentPage,pageSize:pageSize,date:date_,emplId:emplId_};
+            var params={pageNum:currentPage,pageSize:pageSize,startTime:beginDate,endTime:endDate,emplId:emplId_};
             $.post("/employee/logListByPage.do",params,
                 function(data){
 //                    var results = JSON.parse(data);
@@ -52,25 +53,52 @@
                         }
 
                         $('#tb').html(s);
-                        $(day).val(null);
                         $(emplId).val(null);
                     } else{
                         $('#tb').html("");
-                        $(day).val(null);
                         $(emplId).val(null);
                     }
                 })
 
+        }
+        function POIExcel() {
+            beginDate=$(beginDate_).val();
+            endDate=$(endDate_).val();
+            emplId_ = $(emplId).val();
+            if (emplId_==""){
+                emplId_=0;
+            }
+            if (beginDate=="" && endDate=="") {
+                alert("(＞﹏＜)请输入开始和截止日期");
+            }else if(DATE_FORMAT.test(beginDate) == false && beginDate!=""){
+                alert("(＞﹏＜)您输入的开始日期格式有误");
+            }else if(DATE_FORMAT.test(endDate) == false && endDate!=""){
+                alert("(＞﹏＜)您输入的截止日期格式有误");
+            }else if(EMOLID_FORMAT.test(emplId_)==false && emplId_!=null){
+                alert("(＞﹏＜)您输入的员工号格式有误,请输入数字");
+            }else {
+                window.open("/POIExcel/findAliAccountSumReport.do?emplId="+emplId_+"&beginTime="+beginDate+"&endTime="+endDate+"");
+            }
+//            $.post("/POIExcel/findAliAccountSumReport.do",null,
+//                function (get) {
+//
+//                }
+//            )
         }
         $(document).ready(
 
             function(){
                 //员工号查询查询
                 $("#emplIdBotton").click(function() {
-                    date_ = $(day).val();
-                    emplId_ = $(emplId).val();
-                    if (DATE_FORMAT.test(date_) == false && date_!="") {
-                        alert("(＞﹏＜)您输入的日期格式有误，正确格式应为:2012-01-01");
+                    beginDate= $("#beginDate_").val();
+                    endDate=$("#endDate_").val();
+                    emplId_ = $("#emplId").val();
+                    if (beginDate=="" && endDate=="") {
+                        alert("(＞﹏＜)请输入开始和截止日期");
+                    }else if(DATE_FORMAT.test(beginDate) == false && beginDate!=""){
+                        alert("(＞﹏＜)您输入的开始日期格式有误");
+                    }else if(DATE_FORMAT.test(endDate) == false && endDate!=""){
+                        alert("(＞﹏＜)您输入的截止日期格式有误");
                     }else if(EMOLID_FORMAT.test(emplId_)==false && emplId_!=null){
                         alert("(＞﹏＜)您输入的员工号格式有误,请输入数字");
                     }else {
@@ -104,6 +132,7 @@
                     currentPage = totalPage;
                     queryForPages();
                 });
+
                 queryForPages();
             }
             );
@@ -138,9 +167,9 @@
                     <a href="#"><i class="icon-font">&#xe018;</i>系统管理</a>
                     <ul class="sub-menu">
                         <li><a href="emplInfo.html"><i class="icon-font">&#xe017;</i>员工信息</a></li>
-                        <li><a href="system.html"><i class="icon-font">&#xe037;</i>清理缓存</a></li>
-                        <li><a href="system.html"><i class="icon-font">&#xe046;</i>数据备份</a></li>
-                        <li><a href="system.html"><i class="icon-font">&#xe045;</i>数据还原</a></li>
+                        <!--<li><a href="system.html"><i class="icon-font">&#xe037;</i>清理缓存</a></li>-->
+                        <!--<li><a href="system.html"><i class="icon-font">&#xe046;</i>数据备份</a></li>-->
+                        <!--<li><a href="system.html"><i class="icon-font">&#xe045;</i>数据还原</a></li>-->
                     </ul>
                 </li>
             </ul>
@@ -157,10 +186,14 @@
                     <table class="search-tab">
                         <tr >
                             <th width="70">时间:</th>
-                            <td><input   name="date"   type="date"  id="day" placeholder="格式为:XXXX-XX-XX"></td>
+                            <td><input   name="beginDate_"   type="date"  id="beginDate_" placeholder="格式为:XXXX-XX-XX"></td>
+                            <th>至</th>
+                            <td><input   name="endDate_"   type="date"  id="endDate_" placeholder="格式为:XXXX-XX-XX"></td>
                             <th width="70">员工号:</th>
                             <td><input   name="emplId"   type="text"  id="emplId" ></td>
                             <td><input id="emplIdBotton"  class="btn btn-primary btn2" name="emplIdBotton" value="查询"  type="button"/></td>
+                            <td><input onclick="POIExcel()" id="POIExcel"  class="btn btn-primary btn2" name="POIExcel" value="导出"  type="button"/></td>
+
                         </tr>
                     </table>
 
